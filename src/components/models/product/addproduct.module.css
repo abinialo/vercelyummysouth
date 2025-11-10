@@ -1,0 +1,126 @@
+.modalContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.inputField {
+  flex: 1;
+}
+
+.switchField {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex: 1;
+}
+
+.priceSection {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex: 1;
+}
+
+.priceLabel {
+  font-weight: 500;
+  margin-right: 5px;
+}
+
+.priceRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.uploadSection {
+  margin-top: 10px;
+}
+
+.uploadSection h4 {
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.uploadBox {
+  border: 2px dashed #4caf50;
+  padding: 25px;
+  border-radius: 8px;
+  text-align: center;
+  color: #333;
+  font-size: 14px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.MuiTextField-root {
+  margin-top: 10px;
+}
+.modalBox {
+  background-color: white;
+  width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.priceContainer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.imageUpload input {
+  margin-top: 8px;
+}
+
+.previewContainer {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.previewContainer img {
+  width: 60px;
+  height: 60px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid #ddd;
+}
+
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}

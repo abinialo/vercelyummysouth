@@ -1,0 +1,119 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins";
+}
+img {
+  width: 100%;
+  height: 100%;
+}
+.heading {
+  font-size: 20px;
+  font-weight: 500;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: auto;
+  background-color: white;
+  /* box-shadow: 0 5px 5px -3px #0003, 0 8px 10px 1px #00000024, 0 3px 14px 2px #0000001f !important; */
+}
+.tablehead {
+  background-color: #06402B;
+  color: white;
+  text-align: left;
+  padding: 10px;
+}
+.tablehead th {
+  font-weight: 300;
+  font-size: 13px;
+  padding: 15px 20px;
+}
+.tabledata td {
+  padding: 13px 20px;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.custom-switch .ant-switch-handle::before {
+  background-color: #ffffff !important;
+  transition: background-color 0.3s ease;
+}
+
+.custom-switch.ant-switch-checked .ant-switch-handle::before {
+  background-color: #004d40 !important;
+  transition: background-color 0.3s ease;
+}
+.custom-switch.ant-switch {
+  background-color: #eaeaea;
+}
+
+.custom-switch.ant-switch-checked {
+  background-color: #f4f4f4;
+}
+.custom-switch.ant-switch-checked:hover {
+  background-color: #f4f4f4 !important;
+}
+.custom-switch.ant-switch:hover {
+  background-color: #f4f4f4 !important;
+}
+.button {
+  background-color: #06402B;
+  color: white;
+  border: none;
+  padding: 10px 10px;
+  font-size: 14px;
+  font-weight: 400;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+  box-shadow: 0 3px 1px -2px #0003, 0 2px 2px #00000024, 0 1px 5px #0000001f
+}
+.search{
+  
+  padding: 9px;
+  border-radius: 10px;
+  border: 2px solid black;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.search input{
+  all: unset;
+  width: 100%;
+  font-size: 14px;
+}
+.ant-picker{
+  padding: 8px 11px !important;
+}
+.ant-picker-outlined:focus, .ant-picker-outlined:focus-within {
+    border-color:#d9d9d9 !important;
+    box-shadow:none !important;
+    background-color: #ffffff !important;
+}
+.ant-picker-range .ant-picker-active-bar {
+    background: #06402B !important; 
+}
+.ant-picker:hover{
+  border-color:black !important; 
+}
+.MuiTabs-list{
+  justify-content: space-around !important;
+}
+.css-1usuzwp-MuiButtonBase-root-MuiTab-root.Mui-selected{
+  color:#06402B !important;
+}
+.css-1qltlow-MuiTabs-indicator{
+  background-color: #06402B !important;
+}
+.css-13xfq8m-MuiTabPanel-root {
+    padding: 10px !important;
+}
+.searchclose{
+  cursor: pointer;
+color: #06402B;
+font-size: 20px;
+}
+.css-1toxriw-MuiList-root-MuiMenu-list{
+  height: 210px !important;
+}

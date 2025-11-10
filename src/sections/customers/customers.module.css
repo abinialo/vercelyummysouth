@@ -1,0 +1,40 @@
+.edit {
+  color: #21aa47;
+  cursor: pointer;
+  font-size: 20px;
+}
+.stock {
+  border: none;
+  background-color: #21aa47;
+  color: white;
+  border-radius: 6px;
+  padding: 5px 10px;
+}
+.tableContainer {
+  margin-top: 20px;
+  overflow: auto;
+      box-shadow: 0 5px 5px -3px #0003, 0 8px 10px 1px #00000024, 0 3px 14px 2px #0000001f !important;
+}
+.productContainer {
+ 
+  background-color: white !important;
+
+}
+.stockHead{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.paginationContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+
+@media (max-width: 768px) {
+  .paginationContainer {
+    margin-top: 15px;
+  }
+}

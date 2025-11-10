@@ -1,0 +1,121 @@
+.pageWrapper {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f5f6fa;
+}
+
+.loginContainer {
+  display: flex;
+  width: 60%;
+  height: 60vh;
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+
+.leftSide {
+  flex: 1;
+  background-image: url("../../assets/login/Group 1000004041.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+
+.rightSide {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 40px;
+}
+
+
+.iconCircle {
+  background: #ee4c46;
+  color: white;
+  width: 75px;
+  height:75px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+
+.form {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.inputBox {
+  display: flex;
+  align-items: center;
+  background: #e9eef5;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.inputIcon {
+  margin-right: 10px;
+  color: #6b6b6b;
+  font-size: 10px;
+}
+
+.inputBox input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 13px;
+  color: #333;
+}
+.errorMsg {
+  color: red;
+  font-size: 13px;
+
+}
+
+
+.loginBtn {
+  background: #064635;
+  color: white;
+  border: none;
+  padding: 8px 0;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+
+.loginBtn:hover {
+  background: #033d2f;
+}
+
+
+@media (max-width: 900px) {
+  .loginContainer {
+    flex-direction: column;
+    height: auto;
+    width: 90%;
+  }
+
+  .leftSide {
+    height: 300px;
+  }
+
+  .form {
+    width: 100%;
+  }
+}

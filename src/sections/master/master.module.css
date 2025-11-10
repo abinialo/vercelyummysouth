@@ -1,0 +1,94 @@
+.productContainer {
+  background-color: white;
+
+  overflow: hidden;
+}
+
+.productImage {
+  width: 50px;
+  height: 50px;
+}
+.action {
+  display: flex;
+  gap: 10px;
+}
+.edit {
+  color: #21aa47;
+  cursor: pointer;
+  font-size: 20px;
+}
+.delete {
+  cursor: pointer;
+  font-size: 20px;
+  color: #003300;
+}
+.tableContainer {
+  margin-top: 20px;
+  overflow: auto;
+  box-shadow: 0 5px 5px -3px #0003, 0 8px 10px 1px #00000024, 0 3px 14px 2px #0000001f !important;
+}
+.deliveryForm {
+  display: flex;
+  gap: 20px;
+  align-items: end;
+  margin: 30px 0px;
+    flex-wrap: wrap;
+
+}
+
+.deliveryForm label {
+  font-size: 13px;
+}
+
+.deliveryForm .input {
+  border: 1px solid #ddd;
+  padding: 10px 10px;
+  border-radius: 5px;
+  font-size: 13px;
+}
+.uploadContainer {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  /* height: 200px;  */
+  width: 100%;
+  flex-wrap: wrap;
+
+}
+.cloud {
+  width: 50px;
+}
+.uploadBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px dashed #b3b3b3;
+  border-radius: 8px;
+  width: 350px;
+  height: 100px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #333;
+}
+
+.uploadBox:hover {
+  border-color: #007bff;
+  background-color: #f8f9fa;
+}
+
+.fileInput {
+  display: none;
+}
+
+@media screen and (max-width:768px) {
+  .searchContainer{
+    width: auto !important;
+  }
+  .uploadBox{
+width: 200px;
+  }
+  .uploadContainer{
+    flex-direction: column;
+  }
+}
