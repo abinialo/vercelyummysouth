@@ -11,9 +11,7 @@ const Customers = () => {
 
   const [customers, setCustomers] = useState([])
   const [totalItems, setTotalItems] = useState(0);
-  const handlePageChange = (event, newPage) => setPage(newPage);
   const [search, setSearch] = useState('')
-  const startIndex = (page - 1) * itemsPerPage;
 
 
   const handleSearchChange = (e) => {

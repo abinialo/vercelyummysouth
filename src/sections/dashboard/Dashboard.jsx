@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./dashboard.module.css";
 import {
   AreaChart,
@@ -16,12 +16,9 @@ import img1 from "../../assets/dashboard/Vector1.png";
 import img2 from "../../assets/dashboard/Vector2.png";
 import img3 from "../../assets/dashboard/vector3.png";
 import { FaUser, FaBox } from "react-icons/fa";
-import { getOrderDashboard, getOrders, orderDashboard, userDashboard } from "../../utils/api/Serviceapi";
+import { getOrderDashboard, orderDashboard, userDashboard } from "../../utils/api/Serviceapi";
 
-const data = [
-  { name: "Current Week", current: 0, previous: 0 },
-  { name: "Previous Week", current: 2, previous: 1 },
-];
+
 
 const Dashboard = () => {
 

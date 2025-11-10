@@ -9,7 +9,6 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AddProductModal from "../../components/models/product/addproduct";
 import { getProducts, DeleteProduct } from "../../utils/api/Serviceapi";
-import { Search } from '@mui/icons-material';
 
 const Product = () => {
   const [category, setCategory] = useState('ALL');

@@ -17,7 +17,6 @@ const Stock = () => {
   const [search, setSearch] = useState('')
   const [stocks, setStocks] = useState([])
   const [selectedProductId, setSelectedProductId] = useState(null);
-  const [status, setStatus] = useState('')
   const itemsPerPage = 10;
   const [totalItems, setTotalItems] = useState(0);
 
@@ -51,14 +50,6 @@ const Stock = () => {
     } catch (error) {
       console.error("Error updating stock:", error);
     }
-  };
-
-
-
-
-
-  const onChange = (checked) => {
-    console.log(`switch to ${checked}`);
   };
 
   const getStocksproducts = async () => {

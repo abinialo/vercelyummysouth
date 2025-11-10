@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import  { useEffect, useState } from 'react'
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
@@ -10,12 +10,10 @@ import chips from '../../assets/chips.jpg'
 import styles from './master.module.css'
 import { IoSearchSharp } from "react-icons/io5";
 import cloud from '../../assets/up-arrow.png'
-import Pagination from "@mui/material/Pagination";
 import { Addcategory, Adddelivery, Category, Deletecategory, Deletedelivery, deliveryCharge, Editcategory, Editdelivery, uploadFile } from '../../utils/api/Serviceapi';
 import { toast } from 'react-toastify';
 import { IoIosCloseCircle } from "react-icons/io";
 import { Modal } from 'antd';
-import { set } from 'date-fns';
 
 const Master = () => {
   const [value, setValue] = useState('1');
@@ -246,6 +244,7 @@ const Master = () => {
       getDelivery()
       setDeliveryConfirmVisible(false);
       setSelectedDelivery(null);
+      
     } catch (error) {
       console.log(error)
       console.log('e')
