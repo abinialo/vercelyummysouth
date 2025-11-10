@@ -6,7 +6,7 @@ import { MdDelete } from "react-icons/md";
 import Pagination from "@mui/material/Pagination";
 import { IoSearchSharp } from "react-icons/io5";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+// import "react-toastify/dist/ReactToastify.css";
 import AddProductModal from "../../components/models/product/addproduct";
 import { getProducts, DeleteProduct } from "../../utils/api/Serviceapi";
 

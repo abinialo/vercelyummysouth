@@ -4,8 +4,8 @@ import { RiEditFill } from "react-icons/ri";
 import { MdDelete } from "react-icons/md";
 import { Modal, Box, Typography, Button } from "@mui/material";
 import Pagination from "@mui/material/Pagination";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
 import AddCouponModal from "../../components/models/coupon/addcoupon";
 import { getCoupons,DeleteCoupon } from "../../utils/api/Serviceapi";
 
@@ -75,7 +75,7 @@ const Coupon = () => {
  const handleConfirmDelete = async () => {
   try {
     await DeleteCoupon(couponToDelete._id);
-    toast.success(`Coupon "${couponToDelete.couponName}" deleted successfully!`, {
+    toast.success(`Coupon "${couponToDelete.name}" deleted successfully!`, {
       position: "top-center",
       autoClose: 2000,
     });
@@ -117,7 +117,7 @@ const Coupon = () => {
               <tr className="tablehead">
                 <th>No.</th>
                 <th>Item Name</th>
-                <th>Base Price</th>
+                {/* <th>Base Price</th> */}
                 <th>Amount</th>
                 <th>Start Date</th>
                 <th>End Date</th>
@@ -132,7 +132,7 @@ const Coupon = () => {
                   <tr key={coupon._id || index} className="tabledata">
                     <td>{indexOfFirstItem + index}</td>
                     <td>{coupon.name}</td>
-                    <td>{coupon.basePrice}</td>
+                    {/* <td>{coupon.basePrice}</td> */}
                      <td>
                    {coupon.type === "percentage"
             ? `${coupon.amount}%`
@@ -247,7 +247,6 @@ const Coupon = () => {
         </Box>
       </Modal>
 
-      <ToastContainer />
     </>
   );
 };
