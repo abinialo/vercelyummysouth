@@ -19,7 +19,7 @@ img {
   /* box-shadow: 0 5px 5px -3px #0003, 0 8px 10px 1px #00000024, 0 3px 14px 2px #0000001f !important; */
 }
 .tablehead {
-  background-color: #06402B;
+  background-color: #06402b;
   color: white;
   text-align: left;
   padding: 10px;
@@ -33,6 +33,12 @@ img {
   padding: 13px 20px;
   border-bottom: 1px solid #ddd;
   font-size: 14px;
+}
+.tabledata1 td {
+  padding: 20px 20px;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+  height: 40vh;
 }
 
 .custom-switch .ant-switch-handle::before {
@@ -58,7 +64,7 @@ img {
   background-color: #f4f4f4 !important;
 }
 .button {
-  background-color: #06402B;
+  background-color: #06402b;
   color: white;
   border: none;
   padding: 10px 10px;
@@ -67,10 +73,9 @@ img {
   border-radius: 6px;
   cursor: pointer;
   transition: 0.3s ease-in-out;
-  box-shadow: 0 3px 1px -2px #0003, 0 2px 2px #00000024, 0 1px 5px #0000001f
+  box-shadow: 0 3px 1px -2px #0003, 0 2px 2px #00000024, 0 1px 5px #0000001f;
 }
-.search{
-  
+.search {
   padding: 9px;
   border-radius: 10px;
   border: 2px solid black;
@@ -78,42 +83,41 @@ img {
   gap: 8px;
   align-items: center;
 }
-.search input{
+.search input {
   all: unset;
   width: 100%;
   font-size: 14px;
 }
-.ant-picker{
+.ant-picker {
   padding: 8px 11px !important;
 }
-.ant-picker-outlined:focus, .ant-picker-outlined:focus-within {
-    border-color:#d9d9d9 !important;
-    box-shadow:none !important;
-    background-color: #ffffff !important;
+.ant-picker-outlined:focus,
+.ant-picker-outlined:focus-within {
+  border-color: #d9d9d9 !important;
+  box-shadow: none !important;
+  background-color: #ffffff !important;
 }
 .ant-picker-range .ant-picker-active-bar {
-    background: #06402B !important; 
+  background: #06402b !important;
 }
-.ant-picker:hover{
-  border-color:black !important; 
+.ant-picker:hover {
+  border-color: black !important;
 }
-.MuiTabs-list{
+.MuiTabs-list {
   justify-content: space-around !important;
 }
-.css-1usuzwp-MuiButtonBase-root-MuiTab-root.Mui-selected{
-  color:#06402B !important;
+.css-1usuzwp-MuiButtonBase-root-MuiTab-root.Mui-selected {
+  color: #06402b !important;
 }
-.css-1qltlow-MuiTabs-indicator{
-  background-color: #06402B !important;
+.css-1qltlow-MuiTabs-indicator {
+  background-color: #06402b !important;
 }
 .css-13xfq8m-MuiTabPanel-root {
-    padding: 10px !important;
+  padding: 10px !important;
 }
-.searchclose{
+.searchclose {
   cursor: pointer;
-color: #06402B;
-font-size: 20px;
+  color: #06402b;
+  font-size: 20px;
 }
-.css-1toxriw-MuiList-root-MuiMenu-list{
-  height: 210px !important;
-}
+

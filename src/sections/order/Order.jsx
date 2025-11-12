@@ -199,6 +199,13 @@ const Order = () => {
                       borderWidth: 1,
                     },
                   }}
+                  MenuProps={{
+                    PaperProps: {
+                      sx: {
+                        maxHeight: 210, // ✅ works everywhere
+                      },
+                    },
+                  }}
                 >
 
                   <MenuItem value='all' >All</MenuItem>
@@ -259,10 +266,10 @@ const Order = () => {
               <th>	Payment Status</th>
               <th>	Action</th>
             </tr>
-            {loader ? <tr className='tabledata'>
+            {loader ? <tr className='tabledata1'>
               <td colSpan={10} style={{ textAlign: "center" }}><Loader /></td>
             </tr> :
-              orders.length <= 0 ? <tr className='tabledata'>
+              orders.length <= 0 ? <tr className='tabledata1'>
                 <td colSpan={10} style={{ textAlign: "center" }}>No Data Found</td>
               </tr> :
                 orders.map((item, index) => (

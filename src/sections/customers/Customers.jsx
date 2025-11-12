@@ -77,10 +77,10 @@ const Customers = () => {
             </thead>
 
             <tbody>
-              {loader ? <tr className='tabledata'>
+              {loader ? <tr className='tabledata1'>
                 <td colSpan={4} style={{ textAlign: "center" }}><Loader /></td>
               </tr> :
-                customers.length <= 0 ? <tr className='tabledata'>
+                customers.length <= 0 ? <tr className='tabledata1'>
                   <td colSpan={4} style={{ textAlign: "center" }}>No Data Found</td>
                 </tr> :
                   customers.map((item, index) => (

@@ -115,14 +115,15 @@ const Stock = () => {
               </tr>
             </thead>
             <tbody className="tabledata">
-              {getloader ? <tr className='tabledata'>
-                <td colSpan={7} style={{ textAlign: "center" }}>
-                  <Loader/>
-                  
-                    </td>
-              </tr> 
-              :
-                stocks.length <= 0 ? <tr className='tabledata'>
+              {getloader ?
+                <tr className='tabledata1'>
+                  <td colSpan={7} style={{ textAlign: "center" }}>
+                    <Loader />
+
+                  </td>
+                </tr>
+                :
+                stocks.length <= 0 ? <tr className='tabledata1'>
                   <td colSpan={7} style={{ textAlign: "center" }}>No Data Found</td>
                 </tr> :
                   stocks.map((item, index) => (
@@ -212,7 +213,7 @@ const Stock = () => {
           />
 
           <Button variant="contained" className={styles.updateBtn} onClick={handleUpdate}>
-          {editLoader ? 'Loading...':'Update'}  
+            {editLoader ? 'Loading...' : 'Update'}
           </Button>
         </Box>
       </Modal>

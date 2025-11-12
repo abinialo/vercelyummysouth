@@ -99,7 +99,12 @@ color:red;
   font-size: 15px;
 }
 
-
+.loader{
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .grandTotal {
   font-weight: bold;

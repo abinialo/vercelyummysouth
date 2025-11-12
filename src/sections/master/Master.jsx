@@ -364,10 +364,10 @@ const Master = () => {
                         <th>Action</th>
                       </tr>
                       {categoryLoader ?
-                        <tr className='tabledata'>
+                        <tr className='tabledata1'>
                           <td colSpan={4} style={{ textAlign: "center" }}>   <Loader /></td>
                         </tr> :
-                        category.length <= 0 ? <tr className='tabledata'>
+                        category.length <= 0 ? <tr className='tabledata1'>
                           <td colSpan={4} style={{ textAlign: "center" }}>No Data Found</td>
                         </tr> :
                           category.map((item, index) => (
@@ -473,10 +473,10 @@ const Master = () => {
                         <th>Delivery Charges</th>
                         <th>Action</th>
                       </tr>
-                      {getdeliveryLoader ? <tr className='tabledata'>
+                      {getdeliveryLoader ? <tr className='tabledata1'>
                         <td colSpan={4} style={{ textAlign: "center" }}>   <Loader /></td>
                       </tr> :
-                        delivery.length <= 0 ? <tr className='tabledata'>
+                        delivery.length <= 0 ? <tr className='tabledata1'>
                           <td colSpan={4} style={{ textAlign: "center" }}>No Data Found</td>
                         </tr> :
                           delivery.map((item, index) => (
