@@ -10,7 +10,7 @@ import { useParams } from "react-router-dom";
 import { Orderbyid, updateStatus } from '../../../utils/api/Serviceapi';
 
 const OrderView = () => {
-    const [orderStatus, setStatus] = useState('All');
+    const [orderStatus, setStatus] = useState('');
     const handleStatusChange = (event) => {
         setStatus(event.target.value);
     };
@@ -28,6 +28,7 @@ const OrderView = () => {
             // setCustomers(response.data?.data)
             const orderData = response.data?.data?.data?.[0];
             setOrders(orderData);
+            setStatus(orderData?.orderStatus || '');
             console.log(response.data?.data)
         } catch (error) {
             console.log(error)
@@ -145,12 +146,11 @@ const OrderView = () => {
 
                                                 }}
                                             >
-                                                <MenuItem value='All' >All</MenuItem>
                                                 <MenuItem value='new'>New</MenuItem>
                                                 <MenuItem value='assigned'>Assigned</MenuItem>
-                                                <MenuItem value='Inprogress'>Inprogress</MenuItem>
-                                                <MenuItem value='Delivered'>Delivered</MenuItem>
-                                                <MenuItem value='Cancelled'>Cancelled</MenuItem>
+                                                <MenuItem value='inprogress'>Inprogress</MenuItem>
+                                                <MenuItem value='delivered'>Delivered</MenuItem>
+                                                <MenuItem value='cancelled'>Cancelled</MenuItem>
                                             </Select>
                                         </FormControl>
                                     </Box>

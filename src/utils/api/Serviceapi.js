@@ -86,11 +86,18 @@ export const UpdateProduct = (id, formData) => {
     headers: { "Content-Type": "multipart/form-data" },
   });
 };
+export const getProducts = (value, limit, offset, categoryId) => {
+  let url = `/products/admin?limit=${limit}&offset=${offset}&value=${value}`;
+  if (categoryId) {
+    url += `&categoryId=${categoryId}`;
+  }
+  return apiService.get(url);
+};
 
-export const getProducts = (value, limit, offset) => {
-  return apiService.get(
-    `/products/admin?limit=${limit}&offset=${offset}&value=${value}`
-  );
+
+
+export const getCategoryList = () => {
+  return apiService.get(`/products/categorylist`);
 };
 
 export const uploadProductImages = (formData) => {
@@ -121,25 +128,25 @@ export const DeleteCoupon = (id) => {
 };
 
 export const getBanners = (type, status, name) => {
-  // same as before
+
   return apiService.get(`/banner?type=${type}&status=${status}&name=${name}`);
 };
 
-// ✅ Add banner (POST) → correct endpoint
+
 export const AddBanner = (formData) => {
   return apiService.post("/banner/sub/banner", formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
 };
 
-// ✅ Update banner (PUT) → correct endpoint
+
 export const UpdateBanner = (id, formData) => {
   return apiService.put(`/banner/${id}`, formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
 };
 
-// ✅ Delete banner (DELETE) → correct endpoint
+
 export const DeleteBanner = (id) => {
   return apiService.delete(`/banner/${id}`);
 };

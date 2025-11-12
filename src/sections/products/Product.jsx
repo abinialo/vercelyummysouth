@@ -1,16 +1,20 @@
-import React, { useState, useEffect ,useCallback} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styles from './product.module.css';
 import { Switch, Modal } from 'antd';
 import { RiEditFill } from "react-icons/ri";
 import { MdDelete } from "react-icons/md";
 import Pagination from "@mui/material/Pagination";
 import { IoSearchSharp } from "react-icons/io5";
+import { IoIosCloseCircle } from "react-icons/io";
+
+
 import { toast } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
 import AddProductModal from "../../components/models/product/addproduct";
 import { getProducts, DeleteProduct } from "../../utils/api/Serviceapi";
+import apiService from "../../utils/api/apiService"; 
 
 const Product = () => {
+  const [categories, setCategories] = useState([]);
   const [category, setCategory] = useState('ALL');
   const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
@@ -21,55 +25,94 @@ const Product = () => {
   const [products, setProducts] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
 
-  const itemsPerPage = 5; 
+  const itemsPerPage = 5;
 
+  
+  const fetchCategories = async () => {
+    try {
+      const res = await apiService.get("/products/categorylist");
+      if (res?.data?.status) {
+        setCategories(res.data.data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch categories", err);
+      toast.error("Failed to load categories");
+    }
+  };
 
-  const fetchProducts = useCallback(async () => {
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+  const handleStatusToggle = async (product) => {
+  const newStatus = product.status === "active" ? "inactive" : "active";
+
   try {
-    const limit = itemsPerPage;
-    const offset = (page - 1) * limit;
-    const search = searchTerm || "";
-    
-
-    const response = await getProducts(search, limit, offset);
-    console.log("API Response:", response.data);
+    const response = await apiService.put(`/products/${product._id}`, {
+      status: newStatus,
+    });
 
     if (response?.data?.status || response?.data?.code === 200) {
-      const productData = response.data.data?.data || [];
-      const total = response.data.data?.totalCount || 0;
-
- 
-      setProducts(productData);
-      setTotalItems(total);
+      // toast.success(`Product status changed to ${newStatus}`);
+    
+      setProducts((prev) =>
+        prev.map((p) =>
+          p._id === product._id ? { ...p, status: newStatus } : p
+        )
+      );
     } else {
-      setProducts([]);
-      setTotalItems(0);
+      toast.error("Failed to update product status");
     }
   } catch (error) {
-    console.error("Error fetching products:", error);
-    toast.error("Failed to fetch products");
+    console.error("Error updating product status:", error);
+    toast.error("Something went wrong while updating status");
   }
-}, [page, searchTerm]);
+};
 
+
+ 
+  const fetchProducts = useCallback(async () => {
+    try {
+      const limit = itemsPerPage;
+      const offset = (page - 1) * limit;
+      const search = searchTerm || "";
+      const categoryFilter = category === "ALL" ? "" : category;
+
+      const response = await getProducts(search, limit, offset, categoryFilter);
+
+      if (response?.data?.status || response?.data?.code === 200) {
+        const productData = response.data.data?.data || [];
+        const total = response.data.data?.totalCount || 0;
+
+        setProducts(productData);
+        setTotalItems(total);
+      } else {
+        setProducts([]);
+        setTotalItems(0);
+      }
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      // toast.error("Failed to fetch products");
+    }
+  }, [page, searchTerm, category]);
+
+  useEffect(() => {
+    setPage(1); // reset to page 1 when search/category changes
+  }, [category, searchTerm]);
 
   useEffect(() => {
     fetchProducts();
-  }, [page, searchTerm, category]);
-
+  }, [fetchProducts]);
 
   const handlePageChange = (event, value) => setPage(value);
 
-
-  const onChange = (checked) => {
-    console.log(`switch to ${checked}`);
-  };
-
+  // const onChange = (checked) => {
+  //   console.log(`switch to ${checked}`);
+  // };
 
   const handleEdit = (product) => {
     setSelectedProduct(product);
     setOpenEditModal(true);
   };
-
 
   const handleDelete = (product) => {
     setSelectedProduct(product);
@@ -112,39 +155,72 @@ const Product = () => {
         </div>
 
         <div className={styles.topContainer}>
- 
           <div className={styles.categoryBox}>
             <label htmlFor="category">Category</label>
             <select
-              id="category"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            >
-              <option value="ALL">ALL</option>
-              <option value="Snacks & Sweets">Snacks & Sweets</option>
-              <option value="Cookies">Cookies</option>
-              <option value="Murukku">Murukku</option>
-              <option value="Regional Snacks">Regional Snacks & Sweets</option>
-              <option value="Panda Dappa">Panda Dappa</option>
-              <option value="Masala">Masala</option>
-            </select>
+  id="category"
+  value={category}
+  onChange={(e) => setCategory(e.target.value)}
+>
+  <option value="ALL">ALL</option>
+  {categories.map((cat) => (
+    <option key={cat.categoryDetails._id} value={cat.categoryDetails._id}>
+      {cat.categoryDetails.categoryName}
+    </option>
+  ))}
+</select>
+
           </div>
 
-        
-          <div style={{ width: '300px' }}>
-            <div className="search">
-              <input
-                type="text"
-                placeholder="Search Product"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <IoSearchSharp />
-            </div>
-          </div>
+          <div style={{ width: "300px" }}>
+  <div
+    className="search"
+    style={{
+      position: "relative",
+      display: "flex",
+      alignItems: "center",
+    }}
+  >
+    <input
+      type="text"
+      placeholder="Search Product"
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      style={{
+        width: "100%",
+        padding: "8px 35px 8px 10px",
+        border: "1px solid #ccc",
+        borderRadius: "6px",
+        outline: "none",
+      }}
+    />
+
+    {searchTerm ? (
+      <IoIosCloseCircle
+        onClick={() => setSearchTerm("")}
+        style={{
+          position: "absolute",
+          right: "10px",
+          fontSize: "20px",
+          color: "#777",
+          cursor: "pointer",
+        }}
+      />
+    ) : (
+      <IoSearchSharp
+        style={{
+          position: "absolute",
+          right: "10px",
+          fontSize: "18px",
+          color: "#777",
+        }}
+      />
+    )}
+  </div>
+</div>
+
         </div>
 
-      
         <div className={styles.tableContainer}>
           <table className="table">
             <thead className="tablehead">
@@ -174,11 +250,12 @@ const Product = () => {
                       </div>
                     </td>
                     <td>
-                      <Switch
-                        checked={product.status === "active"}
-                        onChange={onChange}
-                        className="custom-switch"
-                      />
+                     <Switch
+  checked={product.status === "active"}
+  onChange={() => handleStatusToggle(product)}
+  className="custom-switch"
+/>
+
                     </td>
                     <td>
                       {product.priceDetails?.length > 0
@@ -210,7 +287,6 @@ const Product = () => {
             </tbody>
           </table>
 
-   
           {totalItems > 0 && (
             <div
               style={{
@@ -246,7 +322,7 @@ const Product = () => {
         </div>
       </div>
 
-      {/* ✅ Modals */}
+      {/* Modals */}
       <AddProductModal
         open={openAddModal}
         handleClose={() => setOpenAddModal(false)}
@@ -262,16 +338,11 @@ const Product = () => {
         refreshProducts={fetchProducts}
       />
 
-    
       <Modal
         open={deleteConfirmVisible}
         onCancel={cancelDelete}
         footer={null}
         centered
-        styles={{
-          header: { textAlign: "center" },
-          body: { textAlign: "center", fontSize: "16px", padding: "20px 10px" },
-        }}
         title={
           <span style={{ fontWeight: "600", color: "#0B6623" }}>
             Confirm Delete

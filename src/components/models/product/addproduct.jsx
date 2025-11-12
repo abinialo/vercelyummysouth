@@ -144,9 +144,9 @@ const AddProductModal = ({
           imgUrl: [...(prev.imgUrl || []), uploadedData.imgUrl],
         }));
         setSelectedFiles((prev) => [...prev, uploadedData.imgUrl]);
-        toast.success("Image uploaded successfully!");
+        toast.success("Image uploaded successfully!", { autoClose: 1500 });
       } else {
-        toast.error("Image upload failed!");
+        toast.error("Image upload failed!", { autoClose: 1500 });
       }
     } catch (error) {
       console.error("File upload failed:", error);
@@ -223,7 +223,7 @@ const AddProductModal = ({
       if (isEditMode && productData?._id) {
         response = await UpdateProduct(productData._id, requestData);
         if (response?.data?.status === true) {
-          toast.success("Product updated successfully!");
+          toast.success("Product updated successfully!", { autoClose: 1500 });
           handleClose();
           if (typeof refreshProducts === "function") refreshProducts();
         } else {
@@ -232,7 +232,7 @@ const AddProductModal = ({
       } else {
         response = await AddProduct(requestData);
         if (response?.data?.status === true) {
-          toast.success("Product added successfully!");
+          toast.success("Product added successfully!", { autoClose: 1500 });
           handleClose();
           if (typeof refreshProducts === "function") refreshProducts();
         } else {
@@ -337,7 +337,7 @@ const AddProductModal = ({
           }}
         >
           <TextField
-            name="availableProductQuantity"
+            name="Enter available ProductQuantity"
             label="Available Quantity"
             variant="standard"
             sx={{ flex: "1 1 200px" }}
