@@ -8,10 +8,12 @@ import { IoSearchSharp } from "react-icons/io5";
 import { IoIosCloseCircle } from "react-icons/io";
 
 
+
 import { toast } from "react-toastify";
 import AddProductModal from "../../components/models/product/addproduct";
 import { getProducts, DeleteProduct } from "../../utils/api/Serviceapi";
 import apiService from "../../utils/api/apiService"; 
+import Loader from '../../components/loader/Loader';
 
 const Product = () => {
   const [categories, setCategories] = useState([]);
@@ -24,6 +26,8 @@ const Product = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [products, setProducts] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
+  const [productLoader, setProductLoader] = useState(false);
+
 
   const itemsPerPage = 5;
 
@@ -72,6 +76,8 @@ const Product = () => {
  
   const fetchProducts = useCallback(async () => {
     try {
+      setProductLoader(true); 
+         
       const limit = itemsPerPage;
       const offset = (page - 1) * limit;
       const search = searchTerm || "";
@@ -92,11 +98,13 @@ const Product = () => {
     } catch (error) {
       console.error("Error fetching products:", error);
       // toast.error("Failed to fetch products");
-    }
+    }finally {
+    setProductLoader(false); 
+  }
   }, [page, searchTerm, category]);
 
   useEffect(() => {
-    setPage(1); // reset to page 1 when search/category changes
+    setPage(1); 
   }, [category, searchTerm]);
 
   useEffect(() => {
@@ -171,51 +179,21 @@ const Product = () => {
 </select>
 
           </div>
-
-          <div style={{ width: "300px" }}>
-  <div
-    className="search"
-    style={{
-      position: "relative",
-      display: "flex",
-      alignItems: "center",
-    }}
-  >
+<div style={{ width: "250px" }}>
+  <div className="search">
     <input
       type="text"
       placeholder="Search Product"
       value={searchTerm}
       onChange={(e) => setSearchTerm(e.target.value)}
-      style={{
-        width: "100%",
-        padding: "8px 35px 8px 10px",
-        border: "1px solid #ccc",
-        borderRadius: "6px",
-        outline: "none",
-      }}
     />
-
-    {searchTerm ? (
+    {searchTerm.length > 0 && (
       <IoIosCloseCircle
         onClick={() => setSearchTerm("")}
-        style={{
-          position: "absolute",
-          right: "10px",
-          fontSize: "20px",
-          color: "#777",
-          cursor: "pointer",
-        }}
-      />
-    ) : (
-      <IoSearchSharp
-        style={{
-          position: "absolute",
-          right: "10px",
-          fontSize: "18px",
-          color: "#777",
-        }}
+        className="searchclose"
       />
     )}
+    <IoSearchSharp />
   </div>
 </div>
 
@@ -235,56 +213,62 @@ const Product = () => {
               </tr>
             </thead>
 
-            <tbody>
-              {products.length > 0 ? (
-                products.map((product, index) => (
-                  <tr key={product._id} className="tabledata">
-                    <td>{indexOfFirstItem + index}</td>
-                    <td>{product.productName}</td>
-                    <td>
-                      <div className={styles.productImage}>
-                        <img
-                          src={product.imgUrl?.[0] || "https://via.placeholder.com/50"}
-                          alt={product.productName}
-                        />
-                      </div>
-                    </td>
-                    <td>
-                     <Switch
-  checked={product.status === "active"}
-  onChange={() => handleStatusToggle(product)}
-  className="custom-switch"
-/>
+           <tbody>
+  {productLoader ? (
+    <tr className="tabledata1">
+      <td colSpan={7} style={{ textAlign: "center" }}>
+        <Loader />
+      </td>
+    </tr>
+  ) : products.length > 0 ? (
+    products.map((product, index) => (
+      <tr key={product._id} className="tabledata">
+        <td>{indexOfFirstItem + index}</td>
+        <td>{product.productName}</td>
+        <td>
+          <div className={styles.productImage}>
+            <img
+              src={product.imgUrl?.[0] || "https://via.placeholder.com/50"}
+              alt={product.productName}
+            />
+          </div>
+        </td>
+        <td>
+          <Switch
+            checked={product.status === "active"}
+            onChange={() => handleStatusToggle(product)}
+            className="custom-switch"
+          />
+        </td>
+        <td>
+          {product.priceDetails?.length > 0
+            ? `₹${product.priceDetails[0].price} / ${product.priceDetails[0].prodQuantity}${product.priceDetails[0].uom}`
+            : "N/A"}
+        </td>
+        <td>{product.categoryDetails?.categoryName || "N/A"}</td>
+        <td>
+          <div className={styles.action}>
+            <RiEditFill
+              className={styles.edit}
+              onClick={() => handleEdit(product)}
+            />
+            <MdDelete
+              className={styles.delete}
+              onClick={() => handleDelete(product)}
+            />
+          </div>
+        </td>
+      </tr>
+    ))
+  ) : (
+    <tr className='tabledata1'>
+      <td colSpan={7} style={{ textAlign: "center" }}>
+        No products found
+      </td>
+    </tr>
+  )}
+</tbody>
 
-                    </td>
-                    <td>
-                      {product.priceDetails?.length > 0
-                        ? `₹${product.priceDetails[0].price} / ${product.priceDetails[0].prodQuantity}${product.priceDetails[0].uom}`
-                        : "N/A"}
-                    </td>
-                    <td>{product.categoryDetails?.categoryName || "N/A"}</td>
-                    <td>
-                      <div className={styles.action}>
-                        <RiEditFill
-                          className={styles.edit}
-                          onClick={() => handleEdit(product)}
-                        />
-                        <MdDelete
-                          className={styles.delete}
-                          onClick={() => handleDelete(product)}
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="7" style={{ textAlign: "center" }}>
-                    No products found
-                  </td>
-                </tr>
-              )}
-            </tbody>
           </table>
 
           {totalItems > 0 && (
@@ -322,7 +306,7 @@ const Product = () => {
         </div>
       </div>
 
-      {/* Modals */}
+  
       <AddProductModal
         open={openAddModal}
         handleClose={() => setOpenAddModal(false)}

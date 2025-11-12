@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
 import AddCouponModal from "../../components/models/coupon/addcoupon";
 import { getCoupons,DeleteCoupon } from "../../utils/api/Serviceapi";
+import Loader from '../../components/loader/Loader';
 
 
 const Coupon = () => {
@@ -18,6 +19,7 @@ const Coupon = () => {
   const [page, setPage] = useState(1);
   const [coupons, setCoupons] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
+  const [couponLoader, setCouponLoader] = useState(false);
 
   const itemsPerPage = 10;
 
@@ -27,6 +29,7 @@ const Coupon = () => {
 
   const fetchCoupons = useCallback(async () => {
     try {
+       setCouponLoader(true);
       const limit = itemsPerPage;
       const offset = (page - 1) * limit;
       const response = await getCoupons(limit, offset);
@@ -47,6 +50,9 @@ const Coupon = () => {
       console.error("Error fetching coupons:", error);
       toast.error("Server error while fetching coupons");
     }
+    finally {
+    setCouponLoader(false); // stop loader
+  }
   }, [page]);
 
   useEffect(() => {
@@ -126,43 +132,50 @@ const Coupon = () => {
               </tr>
             </thead>
 
-            <tbody>
-              {coupons.length > 0 ? (
-                coupons.map((coupon, index) => (
-                  <tr key={coupon._id || index} className="tabledata">
-                    <td>{indexOfFirstItem + index}</td>
-                    <td>{coupon.name}</td>
-                    <td>{coupon.basePrice}</td>
-                     <td>
-                   {coupon.type === "percentage"
+           <tbody>
+  {couponLoader ? (
+    <tr className="tabledata1">
+      <td colSpan="8" style={{ textAlign: "center" }}>
+        <Loader /> {/* Show your Loader component */}
+      </td>
+    </tr>
+  ) : coupons.length > 0 ? (
+    coupons.map((coupon, index) => (
+      <tr key={coupon._id || index} className="tabledata">
+        <td>{indexOfFirstItem + index}</td>
+        <td>{coupon.name}</td>
+        <td>{coupon.basePrice}</td>
+        <td>
+          {coupon.type === "percentage"
             ? `${coupon.amount}%`
             : `₹${coupon.amount}`}
         </td>
-                    <td>{formatDate(coupon.startDate)}</td>
-                    <td>{formatDate(coupon.endDate)}</td>
-                    <td>{coupon.status}</td>
-                    <td>
-                      <div className={styles.action}>
-                        <RiEditFill
-                          className={styles.edit}
-                          onClick={() => handleOpenEdit(coupon)}
-                        />
-                        <MdDelete
-                          className={styles.delete}
-                          onClick={() => handleOpenDelete(coupon)}
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="8" style={{ textAlign: "center" }}>
-                    No coupons found
-                  </td>
-                </tr>
-              )}
-            </tbody>
+        <td>{formatDate(coupon.startDate)}</td>
+        <td>{formatDate(coupon.endDate)}</td>
+        <td>{coupon.status}</td>
+        <td>
+          <div className={styles.action}>
+            <RiEditFill
+              className={styles.edit}
+              onClick={() => handleOpenEdit(coupon)}
+            />
+            <MdDelete
+              className={styles.delete}
+              onClick={() => handleOpenDelete(coupon)}
+            />
+          </div>
+        </td>
+      </tr>
+    ))
+  ) : (
+    <tr className="tabledata1">
+      <td colSpan="8" style={{ textAlign: "center" }}>
+        No coupons found
+      </td>
+    </tr>
+  )}
+</tbody>
+
           </table>
 
           <div

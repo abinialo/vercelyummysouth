@@ -36,12 +36,11 @@ const AddProductModal = ({
   });
 
   const [errors, setErrors] = useState({});
-  const [priceDetails, setPriceDetails] = useState([
-    { prodQuantity: "", uom: "", price: "", cutprice: "" },
-  ]);
+  const [priceDetails, setPriceDetails] = useState([]); // start empty
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [categories, setCategories] = useState([]);
 
+  // Fetch categories when modal opens
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -59,6 +58,7 @@ const AddProductModal = ({
     if (open) fetchCategories();
   }, [open]);
 
+  // Initialize form on modal open / close
   useEffect(() => {
     if (open && productData) {
       setFormData({
@@ -70,13 +70,7 @@ const AddProductModal = ({
         recommended: productData.recommended || false,
         imgUrl: productData.imgUrl || [],
       });
-
-      setPriceDetails(
-        productData.priceDetails?.length
-          ? productData.priceDetails
-          : [{ prodQuantity: "", uom: "", price: 0, cutprice: 0 }]
-      );
-
+      setPriceDetails(productData.priceDetails || []); // only for edit
       setSelectedFiles(productData.imgUrl || []);
     } else if (!open) {
       setFormData({
@@ -88,12 +82,13 @@ const AddProductModal = ({
         recommended: false,
         imgUrl: [],
       });
-      setPriceDetails([{ prodQuantity: "", uom: "", price: 0, cutprice: 0 }]);
+      setPriceDetails([]); // reset to empty
       setErrors({});
       setSelectedFiles([]);
     }
   }, [open, productData]);
 
+  // Form input change
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -104,6 +99,7 @@ const AddProductModal = ({
     }
   };
 
+  // Price detail change
   const handlePriceChange = (index, field, value) => {
     const updated = [...priceDetails];
     if (field === "price" || field === "cutprice") {
@@ -114,6 +110,7 @@ const AddProductModal = ({
     setPriceDetails(updated);
   };
 
+  // Add price row
   const handleAddPriceDetail = () => {
     setPriceDetails([
       ...priceDetails,
@@ -121,12 +118,14 @@ const AddProductModal = ({
     ]);
   };
 
+  // Remove price row
   const handleRemovePriceDetail = (index) => {
     const updated = [...priceDetails];
     updated.splice(index, 1);
     setPriceDetails(updated);
   };
 
+  // File upload
   const handleFileChange = async (e) => {
     const files = Array.from(e.target.files);
     if (files.length === 0) return;
@@ -154,7 +153,7 @@ const AddProductModal = ({
     }
   };
 
-  // ✅ Remove image function
+  // Remove uploaded file
   const handleRemoveFile = (index) => {
     setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
     setFormData((prev) => ({
@@ -163,35 +162,25 @@ const AddProductModal = ({
     }));
   };
 
+  // Form validation
   const validateForm = () => {
     let tempErrors = {};
 
     if (!formData.categoryId) tempErrors.categoryId = "Category is required";
-    if (!formData.productName)
-      tempErrors.productName = "Product name is required";
+    if (!formData.productName) tempErrors.productName = "Product name is required";
     if (!formData.status) tempErrors.status = "Status is required";
-    if (
-      !formData.availableProductQuantity ||
-      isNaN(formData.availableProductQuantity)
-    ) {
-      tempErrors.availableProductQuantity =
-        "Available quantity must be a number";
+    if (!formData.availableProductQuantity || isNaN(formData.availableProductQuantity)) {
+      tempErrors.availableProductQuantity = "Available quantity must be a number";
     }
-    if (!formData.description.trim())
-      tempErrors.description = "Description is required";
     if (!formData.imgUrl || formData.imgUrl.length === 0)
       tempErrors.imgUrl = "Please upload at least one product image";
-    if (!priceDetails.length)
-      tempErrors.priceDetails = "At least one price detail is required";
-    else {
+
+    if (priceDetails.length) {
       priceDetails.forEach((detail, index) => {
-        if (!detail.prodQuantity)
-          tempErrors[`prodQuantity_${index}`] = "Quantity required";
+        if (!detail.prodQuantity) tempErrors[`prodQuantity_${index}`] = "Quantity required";
         if (!detail.uom) tempErrors[`uom_${index}`] = "UOM required";
-        if (detail.price === "" || detail.price <= 0)
-          tempErrors[`price_${index}`] = "Price must be greater than 0";
-        if (detail.cutprice === "" || detail.cutprice < 0)
-          tempErrors[`cutprice_${index}`] = "Cut price cannot be negative";
+        if (detail.price === "" || detail.price <= 0) tempErrors[`price_${index}`] = "Price must be greater than 0";
+        if (detail.cutprice === "" || detail.cutprice < 0) tempErrors[`cutprice_${index}`] = "Cut price cannot be negative";
       });
     }
 
@@ -199,6 +188,7 @@ const AddProductModal = ({
     return Object.keys(tempErrors).length === 0;
   };
 
+  // Submit
   const handleSubmit = async () => {
     if (!validateForm()) {
       toast.error(`Failed to ${title.toLowerCase()} — missing fields!`);
@@ -264,27 +254,12 @@ const AddProductModal = ({
       >
         {/* Header */}
         <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography variant="h6" fontWeight="bold">
-            {title}
-          </Typography>
-          <IconButton onClick={handleClose}>
-            <Close sx={{ color: "green" }} />
-          </IconButton>
+          <Typography variant="h6" fontWeight="bold">{title}</Typography>
+          <IconButton onClick={handleClose}><Close sx={{ color: "green" }} /></IconButton>
         </Box>
 
         {/* Category / Name / Status */}
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: {
-              xs: "1fr",
-              sm: "repeat(2, 1fr)",
-              md: "repeat(3, 1fr)",
-            },
-            gap: 2,
-            mt: 2,
-          }}
-        >
+        <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }, gap: 2, mt: 2 }}>
           <TextField
             name="categoryId"
             label="Select Category *"
@@ -296,12 +271,9 @@ const AddProductModal = ({
           >
             <MenuItem value="">Select</MenuItem>
             {categories.map((cat) => (
-              <MenuItem key={cat._id} value={cat._id}>
-                {cat.categoryName}
-              </MenuItem>
+              <MenuItem key={cat._id} value={cat._id}>{cat.categoryName}</MenuItem>
             ))}
           </TextField>
-
           <TextField
             name="productName"
             label="Product Name *"
@@ -310,7 +282,6 @@ const AddProductModal = ({
             onChange={handleInputChange}
             error={!!errors.productName}
           />
-
           <TextField
             name="status"
             label="Status *"
@@ -319,6 +290,7 @@ const AddProductModal = ({
             value={formData.status}
             onChange={handleInputChange}
             error={!!errors.status}
+            helperText={errors.status}
           >
             <MenuItem value="active">Active</MenuItem>
             <MenuItem value="inactive">Inactive</MenuItem>
@@ -326,68 +298,40 @@ const AddProductModal = ({
         </Box>
 
         {/* Quantity / Recommended / Price Details */}
-        <Box
-          sx={{
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mt: 3,
-            gap: 2,
-          }}
-        >
+        <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", mt: 3, gap: 2 }}>
           <TextField
-            name="Enter available ProductQuantity"
-            label="Available Quantity"
+            name="availableProductQuantity"
+            label="Enter Available Quantity *"
             variant="standard"
             sx={{ flex: "1 1 200px" }}
             value={formData.availableProductQuantity}
             onChange={handleInputChange}
+            error={!!errors.availableProductQuantity}
+            helperText={errors.availableProductQuantity}
           />
-
           <Box display="flex" alignItems="center" gap={1}>
             <Typography>Recommended</Typography>
             <Switch
               checked={formData.recommended}
-              onChange={(e) =>
-                setFormData({ ...formData, recommended: e.target.checked })
-              }
+              onChange={(e) => setFormData({ ...formData, recommended: e.target.checked })}
             />
           </Box>
-
           <Box display="flex" alignItems="center" gap={1}>
             <Typography>Price Details</Typography>
-            <IconButton
-              onClick={handleAddPriceDetail}
-              sx={{ background: "#1976d2", color: "#fff", p: 1 }}
-            >
+            <IconButton onClick={handleAddPriceDetail} sx={{ background: "#1976d2", color: "#fff", p: 1 }}>
               <Add />
             </IconButton>
           </Box>
         </Box>
 
-        {/* Price detail list */}
+        {/* Price detail rows */}
         {priceDetails.map((detail, index) => (
-          <Box
-            key={index}
-            sx={{
-              display: "grid",
-              gridTemplateColumns: {
-                xs: "repeat(2, 1fr)",
-                sm: "repeat(4, 1fr) 40px",
-              },
-              alignItems: "center",
-              gap: 2,
-              mt: 2,
-            }}
-          >
+          <Box key={index} sx={{ display: "grid", gridTemplateColumns: { xs: "repeat(2,1fr)", sm: "repeat(4,1fr) 40px" }, gap: 2, mt: 2 }}>
             <TextField
               label="Product Quantity"
               variant="standard"
               value={detail.prodQuantity}
-              onChange={(e) =>
-                handlePriceChange(index, "prodQuantity", e.target.value)
-              }
+              onChange={(e) => handlePriceChange(index, "prodQuantity", e.target.value)}
             />
             <TextField
               label="UOM"
@@ -395,30 +339,24 @@ const AddProductModal = ({
               select
               value={detail.uom}
               onChange={(e) => handlePriceChange(index, "uom", e.target.value)}
-              required
             >
               <MenuItem value="">Select</MenuItem>
               <MenuItem value="g">g</MenuItem>
               <MenuItem value="kg">kg</MenuItem>
             </TextField>
-
             <TextField
               label="Price"
               variant="standard"
               type="number"
               value={detail.price}
-              onChange={(e) =>
-                handlePriceChange(index, "price", e.target.value)
-              }
+              onChange={(e) => handlePriceChange(index, "price", e.target.value)}
             />
             <TextField
               label="Cut Price"
               variant="standard"
               type="number"
               value={detail.cutprice}
-              onChange={(e) =>
-                handlePriceChange(index, "cutprice", e.target.value)
-              }
+              onChange={(e) => handlePriceChange(index, "cutprice", e.target.value)}
             />
             <IconButton onClick={() => handleRemovePriceDetail(index)}>
               <Delete sx={{ color: "red" }} />
@@ -439,26 +377,15 @@ const AddProductModal = ({
           onChange={handleInputChange}
         />
 
-        {/* ✅ Upload Images Section */}
+        {/* Upload Images */}
         <Box sx={{ mt: 3 }}>
           <Typography fontWeight="bold">Upload Images</Typography>
-
           <Box
-            sx={{
-              border: "2px dashed #4CAF50",
-              borderRadius: 2,
-              mt: 1,
-              p: 3,
-              textAlign: "center",
-              color: "gray",
-              fontSize: 15,
-              cursor: "pointer",
-            }}
+            sx={{ border: "2px dashed #4CAF50", borderRadius: 2, mt: 1, p: 3, textAlign: "center", color: "gray", fontSize: 15, cursor: "pointer" }}
             onClick={() => document.getElementById("fileInput").click()}
           >
             Drag & drop your images here or click to select files
           </Box>
-
           <input
             type="file"
             id="fileInput"
@@ -467,74 +394,35 @@ const AddProductModal = ({
             style={{ display: "none" }}
             onChange={handleFileChange}
           />
-
           {selectedFiles.length > 0 && (
-            <Box
-              sx={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: 1.5,
-                mt: 2,
-              }}
-            >
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5, mt: 2 }}>
               {selectedFiles.map((file, i) => (
-                <Box
-                  key={i}
-                  sx={{
-                    position: "relative",
-                    width: 80,
-                    height: 80,
-                    borderRadius: 2,
-                    overflow: "hidden",
-                    border: "1px solid #ccc",
-                  }}
-                >
+                <Box key={i} sx={{ position: "relative", width: 80, height: 80, borderRadius: 2, overflow: "hidden", border: "1px solid #ccc" }}>
                   <IconButton
                     size="small"
-                    sx={{
-                      position: "absolute",
-                      top: 0,
-                      right: 0,
-                      color: "red",
-                      backgroundColor: "white",
-                      "&:hover": { backgroundColor: "#f5f5f5" },
-                      zIndex: 2,
-                      p: "2px",
-                    }}
+                    sx={{ position: "absolute", top: 0, right: 0, color: "red", backgroundColor: "white", "&:hover": { backgroundColor: "#f5f5f5" }, zIndex: 2, p: "2px" }}
                     onClick={() => handleRemoveFile(i)}
                   >
                     <Close sx={{ fontSize: 14 }} />
                   </IconButton>
-
-                  <img
-                    src={
-                      typeof file === "string"
-                        ? file
-                        : URL.createObjectURL(file)
-                    }
-                    alt={`preview-${i}`}
-                    width="100%"
-                    height="100%"
-                    style={{ objectFit: "cover" }}
-                  />
+                  <img src={typeof file === "string" ? file : URL.createObjectURL(file)} alt={`preview-${i}`} width="100%" height="100%" style={{ objectFit: "cover" }} />
                 </Box>
               ))}
             </Box>
+          )}
+          {errors.imgUrl && (
+            <Typography color="error" variant="body2" sx={{ mt: 1 }}>
+              {errors.imgUrl}
+            </Typography>
           )}
         </Box>
 
         {/* Buttons */}
         <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2, mt: 4 }}>
-          <Button variant="outlined" onClick={handleClose}>
-            CANCEL
-          </Button>
+          <Button variant="outlined" onClick={handleClose}>CANCEL</Button>
           <Button
             variant="contained"
-            sx={{
-              background: "#003300",
-              color: "white",
-              "&:hover": { background: "#004d00" },
-            }}
+            sx={{ background: "#003300", color: "white", "&:hover": { background: "#004d00" } }}
             onClick={handleSubmit}
           >
             {title === "Add Product" ? "CONFIRM" : "UPDATE"}

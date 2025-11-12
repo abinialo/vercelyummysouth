@@ -11,13 +11,16 @@ import {
 } from "../../utils/api/Serviceapi";
 import { toast } from "react-toastify";
 
+
 const Settings = () => {
   const [banners, setBanners] = useState([{ id: null, image: null, imageUrl: null }]);
   const [subBanners, setSubBanners] = useState([{ id: null, image: null, imageUrl: null }]);
+ 
 
   // 🔹 Fetch Web Banner (max 3)
   const fetchWebBanners = async () => {
     try {
+        
       const res = await getBanners("web", "active", "banner");
       const data = res.data?.data?.data || [];
 
@@ -42,11 +45,13 @@ const Settings = () => {
       console.error("Error fetching web banners:", error);
       toast.error("Failed to fetch web banners");
     }
+    
   };
 
   // 🔹 Fetch Sub Banner
   const fetchSubBanners = async () => {
     try {
+         
       const res = await getBanners("web", "active", "subbanner");
       const data = res.data?.data?.data || [];
 
