@@ -1,4 +1,4 @@
-import  { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
@@ -14,6 +14,7 @@ import { Addcategory, Adddelivery, Category, Deletecategory, Deletedelivery, del
 import { toast } from 'react-toastify';
 import { IoIosCloseCircle } from "react-icons/io";
 import { Modal } from 'antd';
+import Loader from '../../components/loader/Loader';
 
 const Master = () => {
   const [value, setValue] = useState('1');
@@ -74,22 +75,30 @@ const Master = () => {
   const [editId, setEditId] = useState(null);
   const [isdeliveyMode, setIsdeliveryMode] = useState(false);
   const [deliveryId, setDeliveryId] = useState(null);
+
+  const [categoryLoader, setCategoryLoader] = useState(false)
   const getCategory = async () => {
+    setCategoryLoader(true)
     try {
       const response = await Category(search)
       setCategory(response.data.data)
       // console.log(response.data.data)
+      setCategoryLoader(false)
     } catch (error) {
       console.log(error)
     } finally {
 
     }
   };
+
+  const [getdeliveryLoader, setgetDeliveryLoader] = useState(false)
   const getDelivery = async () => {
+    setgetDeliveryLoader(true)
     try {
       const response = await deliveryCharge(state)
       setDelivery(response.data.data)
       // console.log(response.data.data)
+      setgetDeliveryLoader(false)
     } catch (error) {
       console.log(error)
       // toast.error(error.response.data.message)
@@ -125,24 +134,31 @@ const Master = () => {
   })
 
   const [imgError, setimgError] = useState(false)
+
+  const [loader, setLoader] = useState(false)
   const handleSave = async () => {
     if (!addCategory.categoryName) {
       toast.error("Category name is required");
       setError(true)
       return;
-    }else if (!addCategory.imgUrl) {
+    } else if (!addCategory.imgUrl) {
       toast.error("Image is required");
       setimgError(true)
       return;
     }
     try {
+      setLoader(true)
       if (isEditMode) {
 
         const res = await Editcategory(addCategory, editId);
+        setLoader(false)
+
         toast.success("Category updated successfully!");
       } else {
 
         const res = await Addcategory(addCategory);
+        setLoader(false)
+
         toast.success("Category added successfully!");
       }
 
@@ -151,12 +167,14 @@ const Master = () => {
       setEditId(null);
       getCategory();
       console.log('e')
-
+      setLoader(false)
     } catch (error) {
       console.error(error);
       toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
+
+  const [deliveryLoader, setDeliveryLoader] = useState(false)
   const handledeliverySave = async () => {
     if (!adddelivery.state) {
       toast.error("States is required");
@@ -170,13 +188,17 @@ const Master = () => {
       return;
     }
     try {
+      setDeliveryLoader(true)
       if (isdeliveyMode) {
 
         const res = await Editdelivery(adddelivery, deliveryId);
+        setDeliveryLoader(false)
         toast.success("Deliverys Charges updated successfully!");
+
       } else {
 
         const res = await Adddelivery(adddelivery);
+        setDeliveryLoader(false)
         toast.success("Deliverys Charges added successfully!");
       }
       setAddDelivery({ state: "", deliveryCharge: "" });
@@ -184,7 +206,7 @@ const Master = () => {
       setDeliveryId(null);
       getDelivery();
       console.log('e')
-
+      setDeliveryLoader(false)
     } catch (error) {
       console.error(error);
       toast.error(error.response?.data?.message || "Something went wrong");
@@ -244,7 +266,7 @@ const Master = () => {
       getDelivery()
       setDeliveryConfirmVisible(false);
       setSelectedDelivery(null);
-      
+
     } catch (error) {
       console.log(error)
       console.log('e')
@@ -309,7 +331,7 @@ const Master = () => {
                             <div className={styles.cloud}>
                               <img src={cloud} alt="" />
                             </div>
-                            <input type="file" onChange={(e)=>{aadharfile(e);setimgError(false)}} id="fileUpload" className={styles.fileInput} />
+                            <input type="file" onChange={(e) => { aadharfile(e); setimgError(false) }} id="fileUpload" className={styles.fileInput} />
                           </label>
                         </div>
                       }
@@ -317,7 +339,7 @@ const Master = () => {
                     <div>
                       <div >
                         <button className="button" onClick={handleSave}>
-                          {isEditMode ? "Update" : "Save"}
+                          {loader ? 'Loading..' : isEditMode ? "Update" : "Save"}
                         </button>
                       </div>
                     </div>
@@ -341,27 +363,31 @@ const Master = () => {
                         <th>Name</th>
                         <th>Action</th>
                       </tr>
-                      {category.length <= 0 ? <tr className='tabledata'>
-                        <td colSpan={4} style={{ textAlign: "center" }}>No Data Found</td>
-                      </tr> :
-                        category.map((item, index) => (
-                          <tr className='tabledata' key={item._id}>
-                            <td>{index + 1}</td>
-                            <td>
-                              <div className={styles.productImage}>
-                                <img src={item.imgUrl} alt="snacks" />
-                              </div>
-                            </td>
-                            <td>
-                              {item.categoryName}</td>
-                            <td>
-                              <div className={styles.action}>
-                                <RiEditFill className={styles.edit} onClick={() => handleEdit(item)} />
-                                <MdDelete className={styles.delete} onClick={() => handleDelete(item._id)} />
-                              </div>
-                            </td>
-                          </tr>
-                        ))
+                      {categoryLoader ?
+                        <tr className='tabledata'>
+                          <td colSpan={4} style={{ textAlign: "center" }}>   <Loader /></td>
+                        </tr> :
+                        category.length <= 0 ? <tr className='tabledata'>
+                          <td colSpan={4} style={{ textAlign: "center" }}>No Data Found</td>
+                        </tr> :
+                          category.map((item, index) => (
+                            <tr className='tabledata' key={item._id}>
+                              <td>{index + 1}</td>
+                              <td>
+                                <div className={styles.productImage}>
+                                  <img src={item.imgUrl} alt="snacks" />
+                                </div>
+                              </td>
+                              <td>
+                                {item.categoryName}</td>
+                              <td>
+                                <div className={styles.action}>
+                                  <RiEditFill className={styles.edit} onClick={() => handleEdit(item)} />
+                                  <MdDelete className={styles.delete} onClick={() => handleDelete(item._id)} />
+                                </div>
+                              </td>
+                            </tr>
+                          ))
                       }
                     </table>
                   </div>
@@ -423,7 +449,7 @@ const Master = () => {
                     <div>
                       <div>
                         <button className='button' onClick={handledeliverySave}>
-                          {isdeliveyMode ? "Update" : "Save"}
+                          {deliveryLoader ? 'Loading..' : isdeliveyMode ? "Update" : "Save"}
                         </button>
                       </div>
                     </div>
@@ -447,25 +473,28 @@ const Master = () => {
                         <th>Delivery Charges</th>
                         <th>Action</th>
                       </tr>
-                      {delivery.length <= 0 ? <tr className='tabledata'>
-                        <td colSpan={4} style={{ textAlign: "center" }}>No Data Found</td>
+                      {getdeliveryLoader ? <tr className='tabledata'>
+                        <td colSpan={4} style={{ textAlign: "center" }}>   <Loader /></td>
                       </tr> :
-                        delivery.map((item, index) => (
-                          <tr className='tabledata'>
-                            <td>{index + 1}</td>
-                            <td>
-                              {item.state}
-                            </td>
-                            <td>
-                              {item.deliveryCharge}</td>
-                            <td>
-                              <div className={styles.action}>
-                                <RiEditFill className={styles.edit} onClick={() => handledeliveryEdit(item)} />
-                                <MdDelete className={styles.delete} onClick={() => deliveryDelete(item._id)} />
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
+                        delivery.length <= 0 ? <tr className='tabledata'>
+                          <td colSpan={4} style={{ textAlign: "center" }}>No Data Found</td>
+                        </tr> :
+                          delivery.map((item, index) => (
+                            <tr className='tabledata'>
+                              <td>{index + 1}</td>
+                              <td>
+                                {item.state}
+                              </td>
+                              <td>
+                                {item.deliveryCharge}</td>
+                              <td>
+                                <div className={styles.action}>
+                                  <RiEditFill className={styles.edit} onClick={() => handledeliveryEdit(item)} />
+                                  <MdDelete className={styles.delete} onClick={() => deliveryDelete(item._id)} />
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
                     </table>
                   </div>
                 </div>

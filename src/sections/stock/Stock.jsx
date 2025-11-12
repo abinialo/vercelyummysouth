@@ -9,6 +9,8 @@ import { Modal, Box, Typography, TextField, Button, IconButton } from "@mui/mate
 import { Close } from "@mui/icons-material";
 import { editStocks, getStocks } from "../../utils/api/Serviceapi";
 import { IoIosCloseCircle } from "react-icons/io";
+import Loader from '../../components/loader/Loader';
+import { set } from "date-fns";
 
 const Stock = () => {
   const [open, setOpen] = useState(false);
@@ -19,8 +21,8 @@ const Stock = () => {
   const [selectedProductId, setSelectedProductId] = useState(null);
   const itemsPerPage = 10;
   const [totalItems, setTotalItems] = useState(0);
-
-
+  const [getloader, setgetLoader] = useState(false)
+  const [editLoader, setEditLoader] = useState(false)
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
     setStocks([])
@@ -39,6 +41,7 @@ const Stock = () => {
 
   const handleUpdate = async () => {
     if (!availableProductQuantity) return alert("Please enter available quantity");
+    setEditLoader(true)
     try {
       const response = await editStocks(selectedProductId, {
         availableProductQuantity,
@@ -47,12 +50,15 @@ const Stock = () => {
       getStocksproducts();
       setOpen(false);
       setQuantity("");
+      setEditLoader(false)
     } catch (error) {
       console.error("Error updating stock:", error);
+      setEditLoader(false)
     }
   };
 
   const getStocksproducts = async () => {
+    setgetLoader(true)
     try {
       const limit = itemsPerPage;
       const offset = (page - 1) * itemsPerPage;
@@ -60,9 +66,10 @@ const Stock = () => {
       setStocks(response.data?.data?.data)
       // console.log(response.data.data)
       setTotalItems(response.data?.data?.totalCount || 0);
-
+      setgetLoader(false)
     } catch (error) {
       console.log(error)
+      setgetLoader(false)
     }
   }
 
@@ -107,34 +114,40 @@ const Stock = () => {
                 <th>Action</th>
               </tr>
             </thead>
-
             <tbody className="tabledata">
-              {stocks.length <= 0 ? <tr className='tabledata'>
-                <td colSpan={7} style={{ textAlign: "center" }}>No Data Found</td>
-              </tr> :
-                stocks.map((item, index) => (
-                  <tr key={item._id}>
-                    <td>{(page - 1) * itemsPerPage + index + 1}</td>
-                    <td>
-                      <Switch
-                        checked={item.status === "active"}
-                        onChange={(checked) => handleStatusChange(checked, item._id)}
-                        className="custom-switch"
-                      />                    </td>
-                    <td>
-                      {item.status === "active" ?
-                        <button className={styles.stock}>Stock In</button>
-                        : <button className={styles.stockOut}>Stock Out</button>}
+              {getloader ? <tr className='tabledata'>
+                <td colSpan={7} style={{ textAlign: "center" }}>
+                  <Loader/>
+                  
                     </td>
-                    <td>{item.productName}</td>
-                    <td>{Number(item.availableProductQuantity || 0).toFixed(2)}</td>                    <td>{item.priceDetails[0].price} ({item.priceDetails[0].prodQuantity} {item.priceDetails[0].uom} )</td>
-                    <td>
-                      <div className={styles.action}>
-                        <RiEditFill className={styles.edit} onClick={() => handleOpen(item._id)} />
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+              </tr> 
+              :
+                stocks.length <= 0 ? <tr className='tabledata'>
+                  <td colSpan={7} style={{ textAlign: "center" }}>No Data Found</td>
+                </tr> :
+                  stocks.map((item, index) => (
+                    <tr key={item._id}>
+                      <td>{(page - 1) * itemsPerPage + index + 1}</td>
+                      <td>
+                        <Switch
+                          checked={item.status === "active"}
+                          onChange={(checked) => handleStatusChange(checked, item._id)}
+                          className="custom-switch"
+                        />                    </td>
+                      <td>
+                        {item.status === "active" ?
+                          <button className={styles.stock}>Stock In</button>
+                          : <button className={styles.stockOut}>Stock Out</button>}
+                      </td>
+                      <td>{item.productName}</td>
+                      <td>{Number(item.availableProductQuantity || 0).toFixed(2)}</td>                    <td>{item.priceDetails[0].price} ({item.priceDetails[0].prodQuantity} {item.priceDetails[0].uom} )</td>
+                      <td>
+                        <div className={styles.action}>
+                          <RiEditFill className={styles.edit} onClick={() => handleOpen(item._id)} />
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
 
 
 
@@ -199,7 +212,7 @@ const Stock = () => {
           />
 
           <Button variant="contained" className={styles.updateBtn} onClick={handleUpdate}>
-            Update
+          {editLoader ? 'Loading...':'Update'}  
           </Button>
         </Box>
       </Modal>

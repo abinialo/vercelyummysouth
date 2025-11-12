@@ -4,16 +4,17 @@ import { IoSearchSharp } from "react-icons/io5";
 import { IoIosCloseCircle } from "react-icons/io";
 import Pagination from "@mui/material/Pagination";
 import { getCustomers } from '../../utils/api/Serviceapi';
+import { set } from "date-fns";
+import Loader from "../../components/loader/Loader";
 
 const Customers = () => {
   const [page, setPage] = useState(1);
   const itemsPerPage = 10;
-
   const [customers, setCustomers] = useState([])
   const [totalItems, setTotalItems] = useState(0);
   const [search, setSearch] = useState('')
 
-
+  const [loader, setLoader] = useState(false)
   const handleSearchChange = (e) => {
 
     setSearch(e.target.value);
@@ -25,6 +26,7 @@ const Customers = () => {
     getCustomer()
   }, [search, page])
   const getCustomer = async () => {
+    setLoader(true)
     try {
       const limit = itemsPerPage;
       const offset = (page - 1) * itemsPerPage;
@@ -32,8 +34,12 @@ const Customers = () => {
       setCustomers(response.data?.data?.data)
       // console.log(response.data.data)
       setTotalItems(response.data?.data?.totalCount || 0);
+      setLoader(false)
+
     } catch (error) {
       console.log(error)
+      setLoader(false)
+
     } finally {
 
     }
@@ -71,18 +77,20 @@ const Customers = () => {
             </thead>
 
             <tbody>
-
-              {customers.length <= 0 ? <tr className='tabledata'>
-                <td colSpan={4} style={{ textAlign: "center" }}>No Data Found</td>
+              {loader ? <tr className='tabledata'>
+                <td colSpan={4} style={{ textAlign: "center" }}><Loader /></td>
               </tr> :
-                customers.map((item, index) => (
-                  <tr key={item._id} className="tabledata">
-                    <td>{(page - 1) * itemsPerPage + index + 1}</td>
-                    <td>{item.name}</td>
-                    <td>{item.email}</td>
-                    <td>{item.mobileNo}</td>
-                  </tr>
-                ))
+                customers.length <= 0 ? <tr className='tabledata'>
+                  <td colSpan={4} style={{ textAlign: "center" }}>No Data Found</td>
+                </tr> :
+                  customers.map((item, index) => (
+                    <tr key={item._id} className="tabledata">
+                      <td>{(page - 1) * itemsPerPage + index + 1}</td>
+                      <td>{item.name}</td>
+                      <td>{item.email}</td>
+                      <td>{item.mobileNo}</td>
+                    </tr>
+                  ))
 
               }
             </tbody>

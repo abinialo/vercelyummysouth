@@ -1,4 +1,4 @@
-import  { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import styles from './Order.module.css'
 import { IoSearchSharp } from "react-icons/io5";
 import Box from '@mui/material/Box';
@@ -11,6 +11,8 @@ import { Link } from 'react-router-dom';
 import { dropDown, excelOrders, getOrders } from '../../utils/api/Serviceapi';
 import { IoIosCloseCircle } from "react-icons/io";
 import dayjs from 'dayjs';
+import { set } from 'date-fns';
+import Loader from '../../components/loader/Loader';
 const Order = () => {
 
   const [orders, setOrders] = useState([])
@@ -92,8 +94,10 @@ const Order = () => {
     setOrders([])
     setPage(1);
   };
+  const [loader, setLoader] = useState(false)
 
   const getStocksproducts = async () => {
+    setLoader(true)
     try {
       const limit = itemsPerPage;
       const offset = (page - 1) * itemsPerPage;
@@ -107,6 +111,7 @@ const Order = () => {
 
       setOrders(response.data?.data?.data);
       setTotalItems(response.data?.data?.totalCount || 0);
+      setLoader(false)
     } catch (error) {
       console.log(error);
     }
@@ -254,59 +259,62 @@ const Order = () => {
               <th>	Payment Status</th>
               <th>	Action</th>
             </tr>
-            {orders.length <= 0 ? <tr className='tabledata'>
-              <td colSpan={10} style={{ textAlign: "center" }}>No Data Found</td>
+            {loader ? <tr className='tabledata'>
+              <td colSpan={10} style={{ textAlign: "center" }}><Loader /></td>
             </tr> :
-              orders.map((item, index) => (
-                <tr className='tabledata' key={item._id}>
-                  <td>{(page - 1) * itemsPerPage + index + 1}</td>
-                  <td>{item?.userDetails?.name}</td>
-                  <td>{item?.orderCode}</td>
-                  <td>
-                    {item?.createdAt
-                      ? new Date(item.createdAt).toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                      })
-                      : ""}
-                  </td>
+              orders.length <= 0 ? <tr className='tabledata'>
+                <td colSpan={10} style={{ textAlign: "center" }}>No Data Found</td>
+              </tr> :
+                orders.map((item, index) => (
+                  <tr className='tabledata' key={item._id}>
+                    <td>{(page - 1) * itemsPerPage + index + 1}</td>
+                    <td>{item?.userDetails?.name}</td>
+                    <td>{item?.orderCode}</td>
+                    <td>
+                      {item?.createdAt
+                        ? new Date(item.createdAt).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })
+                        : ""}
+                    </td>
 
-                  <td>
-                    {item?.payableAmount}
-                  </td>
-                  <td>
-                    {item?.totalQuantity}
-                  </td>
-                  <td
-                    style={{
-                      color:
-                        item?.orderStatus?.toLowerCase() === "new"
-                          ? "blue"
-                          : item?.orderStatus?.toLowerCase() === "assigned"
-                            ? "orange"
-                            : item?.orderStatus?.toLowerCase() === "inprogress"
-                              ? "gray"
-                              : item?.orderStatus?.toLowerCase() === "delivered"
-                                ? "green"
-                                : item?.orderStatus?.toLowerCase() === "cancelled"
-                                  ? "red"
-                                  : "black",
-                    }}
-                  >
-                    {item?.orderStatus
-                      ? item.orderStatus.charAt(0).toUpperCase() +
-                      item.orderStatus.slice(1).toLowerCase()
-                      : ""}
-                  </td>
+                    <td>
+                      {item?.payableAmount}
+                    </td>
+                    <td>
+                      {item?.totalQuantity}
+                    </td>
+                    <td
+                      style={{
+                        color:
+                          item?.orderStatus?.toLowerCase() === "new"
+                            ? "blue"
+                            : item?.orderStatus?.toLowerCase() === "assigned"
+                              ? "orange"
+                              : item?.orderStatus?.toLowerCase() === "inprogress"
+                                ? "#37c5fdff"
+                                : item?.orderStatus?.toLowerCase() === "delivered"
+                                  ? "green"
+                                  : item?.orderStatus?.toLowerCase() === "cancelled"
+                                    ? "red"
+                                    : "black",
+                      }}
+                    >
+                      {item?.orderStatus
+                        ? item.orderStatus.charAt(0).toUpperCase() +
+                        item.orderStatus.slice(1).toLowerCase()
+                        : ""}
+                    </td>
 
-                  <td>{item?.paymentMode}</td>
-                  <td>{item?.paymentStatus}</td>
-                  <td>
-                    <Link to={`/dashboard/orderview/${item._id}`} >  <button className={styles.stock} style={{ cursor: 'pointer' }}>View</button></Link>
-                  </td>
-                </tr>
-              ))}
+                    <td>{item?.paymentMode}</td>
+                    <td>{item?.paymentStatus}</td>
+                    <td>
+                      <Link to={`/dashboard/orderview/${item._id}`} >  <button className={styles.stock} style={{ cursor: 'pointer' }}>View</button></Link>
+                    </td>
+                  </tr>
+                ))}
           </table>
           {orders.length > 0 &&
             <div

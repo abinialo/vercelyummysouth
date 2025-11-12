@@ -8,6 +8,7 @@ import { FaLocationDot } from "react-icons/fa6";
 import { FaUserCircle } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { Orderbyid, updateStatus } from '../../../utils/api/Serviceapi';
+import { set } from 'date-fns';
 
 const OrderView = () => {
     const [orderStatus, setStatus] = useState('');
@@ -41,10 +42,13 @@ const OrderView = () => {
         }
     }, [id]);
 
+    const [loader, setLoader] = useState(false);
     const update = async () => {
+        setLoader(true)
         try {
             const response = await updateStatus(id, { orderStatus: orderStatus, inProgressAt: new Date() })
             getOrder();
+            setLoader(false)
         } catch (error) {
             console.log(error)
         }
@@ -67,7 +71,7 @@ const OrderView = () => {
                                         : orders?.orderStatus?.toLowerCase() === "assigned"
                                             ? "orange"
                                             : orders?.orderStatus?.toLowerCase() === "inprogress"
-                                                ? "gray"
+                                                ? "#37c5fdff"
                                                 : orders?.orderStatus?.toLowerCase() === "delivered"
                                                     ? "green"
                                                     : orders?.orderStatus?.toLowerCase() === "cancelled"
@@ -156,7 +160,7 @@ const OrderView = () => {
                                     </Box>
 
                                     <div className={styles.save}>
-                                        <button onClick={update}>Save</button>
+                                        <button onClick={update}>{loader ? "Updating..." : "Save"}</button>
                                     </div>
                                 </div>
                             </div>
