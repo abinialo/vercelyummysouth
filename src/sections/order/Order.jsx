@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 import { dropDown, excelOrders, getOrders } from '../../utils/api/Serviceapi';
 import { IoIosCloseCircle } from "react-icons/io";
 import dayjs from 'dayjs';
-import { set } from 'date-fns';
+import { Autocomplete, TextField } from '@mui/material';
 import Loader from '../../components/loader/Loader';
 const Order = () => {
 
@@ -135,6 +135,7 @@ const Order = () => {
     getCustomer()
   }, [])
 
+  const [inputValue, setInputValue] = useState('');
 
 
   return (
@@ -183,39 +184,36 @@ const Order = () => {
           </div>
           <div style={{ width: '250px' }}>
             <Box >
-              <FormControl fullWidth>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={name}
-                  onChange={handleNameChange}
-                  sx={{
-                    '& .MuiSelect-select': {
-                      padding: '8.5px 14px',
+              <Autocomplete
+                options={[{ _id: 'all', name: 'All' }, ...customers]}
+                getOptionLabel={(option) => option?.name ?? ''}
+                value={[{ _id: 'all', name: 'All' }, ...customers].find((item) => item._id === name) || null}
+                inputValue={inputValue}
+                onInputChange={(event, newInputValue) => setInputValue(newInputValue)} // ✅ track typing
+                onChange={(event, newValue) => {
+                  const selectedId = newValue ? newValue._id : ''; // store only ID
+                  setName(selectedId);
+                  setOrders([]);
+                  setPage(1);
+                }}
+                isOptionEqualToValue={(option, value) => option._id === value._id}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    placeholder="Select customer"
+                    variant="outlined"
+                    size="small"
+                  />
+                )}
+                ListboxProps={{ style: { maxHeight: 210 } }}
+                filterOptions={(options, { inputValue }) =>
+                  options.filter((option) =>
+                    option.name?.toLowerCase().includes(inputValue.toLowerCase())
+                  )
+                }
+              />
 
-                    },
-                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                      borderColor: '#c4c4c4',
-                      borderWidth: 1,
-                    },
-                  }}
-                  MenuProps={{
-                    PaperProps: {
-                      sx: {
-                        maxHeight: 210, // ✅ works everywhere
-                      },
-                    },
-                  }}
-                >
 
-                  <MenuItem value='all' >All</MenuItem>
-                  {customers.map((item) => (
-                    <MenuItem value={item._id} key={item._id}>
-                      {item.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
             </Box>
           </div>
           <div>

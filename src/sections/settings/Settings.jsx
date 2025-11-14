@@ -11,16 +11,13 @@ import {
 } from "../../utils/api/Serviceapi";
 import { toast } from "react-toastify";
 
-
 const Settings = () => {
   const [banners, setBanners] = useState([{ id: null, image: null, imageUrl: null }]);
   const [subBanners, setSubBanners] = useState([{ id: null, image: null, imageUrl: null }]);
- 
 
   // 🔹 Fetch Web Banner (max 3)
   const fetchWebBanners = async () => {
     try {
-        
       const res = await getBanners("web", "active", "banner");
       const data = res.data?.data?.data || [];
 
@@ -45,13 +42,11 @@ const Settings = () => {
       console.error("Error fetching web banners:", error);
       toast.error("Failed to fetch web banners");
     }
-    
   };
 
   // 🔹 Fetch Sub Banner
   const fetchSubBanners = async () => {
     try {
-         
       const res = await getBanners("web", "active", "subbanner");
       const data = res.data?.data?.data || [];
 
@@ -118,6 +113,12 @@ const Settings = () => {
     const file = e.target.files[0];
     if (!file) return;
 
+    // Check file size limit 500KB
+    if (file.size > 500 * 1024) {
+      toast.error("File size exceeds 500KB limit");
+      return;
+    }
+
     if (typeName === "banner") {
       const existingCount = banners.filter((b) => b.imageUrl).length;
       if (existingCount >= 3 && !banners[index].id) {
@@ -175,9 +176,6 @@ const Settings = () => {
   const renderBannerSection = (title, data, typeName) => (
     <div className={styles.section}>
       <h4 className={styles.title}>{title}</h4>
-      {/* {typeName === "banner" && (
-        <p className={styles.note}>* Maximum 3 web banners allowed</p>
-      )} */}
 
       <div className={styles.cardWrapper}>
         {data.map((banner, index) => (
@@ -192,21 +190,23 @@ const Settings = () => {
                   className={styles.image}
                 />
               ) : (
-                <img src={img} alt="Placeholder" className={styles.placeholder} />
+                <label className={styles.uploadCard}>
+                  <div className={styles.emptyCard}>
+                    <FaUpload className={styles.emptyIcon} />
+                    <p className={styles.emptyText}>Click or Drag to Upload</p>
+                    <span className={styles.emptyNote}>Max size 500KB</span>
+                  </div>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    hidden
+                    onChange={(e) => handleFileChange(index, e, typeName)}
+                  />
+                </label>
               )}
             </div>
 
-            {!banner.imageUrl ? (
-              <label className={styles.uploadBtn}>
-                <FaUpload /> Choose File
-                <input
-                  type="file"
-                  accept="image/*"
-                  hidden
-                  onChange={(e) => handleFileChange(index, e, typeName)}
-                />
-              </label>
-            ) : (
+            {banner.imageUrl && (
               <div className={styles.actionBtns}>
                 <button
                   className={styles.updateBtn}

@@ -168,7 +168,7 @@ const OrderView = () => {
                                         </Box>
 
                                         <div className={styles.save}>
-                                            <button onClick={update}>{loader ? "Updating..." : "Save"}</button>
+                                            <button onClick={update} disabled={loader} style={{cursor:loader ?'not-allowed':'pointer', backgroundColor: loader ? 'gray' : 'red'}}>{loader ? "Updating..." : "Save"}</button>
                                         </div>
                                     </div>
                                 </div>

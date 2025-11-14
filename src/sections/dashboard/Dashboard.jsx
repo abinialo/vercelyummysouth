@@ -128,96 +128,96 @@ const Dashboard = () => {
 
       <div className={styles.bottomSection}>
         <div className={styles.chartBox}>
-           <ResponsiveContainer width="100%" height="100%">
-        <AreaChart
-          data={chartData}
-          margin={{ top: 20, right: 30, left: 10, bottom: 0 }}
-        >
-          <CartesianGrid strokeDasharray="3 3" stroke="#ddd" />
-          <XAxis
-            dataKey="name"
-            tick={{ fontSize: 12, fill: "#333" }}
-            axisLine={false}
-            tickLine={false}
-          />
-          <YAxis
-            tick={{ fontSize: 12, fill: "#333" }}
-            axisLine={false}
-            tickLine={false}
-          />
-          <Tooltip
-            contentStyle={{
-              backgroundColor: "#fff",
-              border: "1px solid #ccc",
-              borderRadius: "6px",
-              fontSize: "12px",
-            }}
-          />
-          <Legend
-            verticalAlign="top"
-            align="center"
-            content={() => (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  gap: "25px",
-                  marginBottom: "8px",
-                  fontSize: "13px",
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart
+              data={chartData}
+              margin={{ top: 20, right: 30, left: 10, bottom: 0 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke="#ddd" />
+              <XAxis
+                dataKey="name"
+                tick={{ fontSize: 12, fill: "#333" }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis
+                tick={{ fontSize: 12, fill: "#333" }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "#fff",
+                  border: "1px solid #ccc",
+                  borderRadius: "6px",
+                  fontSize: "12px",
                 }}
-              >
-                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                  <span
+              />
+              <Legend
+                verticalAlign="top"
+                align="center"
+                content={() => (
+                  <div
                     style={{
-                      width: "15px",
-                      height: "10px",
-                      backgroundColor: "#FFB6C1",
-                      border: "1px solid #000",
-                      display: "inline-block",
+                      display: "flex",
+                      justifyContent: "center",
+                      gap: "25px",
+                      marginBottom: "8px",
+                      fontSize: "13px",
                     }}
-                  ></span>
-                  <span>Current Week</span>
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                  <span
-                    style={{
-                      width: "15px",
-                      height: "10px",
-                      backgroundColor: "#ADD8E6",
-                      border: "1px solid #000",
-                      display: "inline-block",
-                    }}
-                  ></span>
-                  <span>Previous Week</span>
-                </div>
-              </div>
-            )}
-          />
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                      <span
+                        style={{
+                          width: "15px",
+                          height: "10px",
+                          backgroundColor: "#FFB6C1",
+                          border: "1px solid #000",
+                          display: "inline-block",
+                        }}
+                      ></span>
+                      <span>Current Week</span>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                      <span
+                        style={{
+                          width: "15px",
+                          height: "10px",
+                          backgroundColor: "#ADD8E6",
+                          border: "1px solid #000",
+                          display: "inline-block",
+                        }}
+                      ></span>
+                      <span>Previous Week</span>
+                    </div>
+                  </div>
+                )}
+              />
 
-          {/* ✅ Matching your uploaded style */}
-          <Area
-            type="monotone"
-            dataKey="current"
-            stroke="#000"
-            strokeWidth={4}
-            fill="#FFB6C1"
-            fillOpacity={0.7}
-            dot={{ r: 4, fill: "#FF69B4", stroke: "#000", strokeWidth: 1 }}
-            activeDot={{ r: 5 }}
-            name="Current Week"
-          />
-          <Area
-            type="monotone"
-            dataKey="previous"
-            stroke="#87CEFA"
-            strokeWidth={2}
-            fill="#ADD8E6"
-            fillOpacity={0.6}
-            dot={{ r: 4, fill: "#87CEFA", stroke: "#000", strokeWidth: 1 }}
-            name="Previous Week"
-          />
-        </AreaChart>
-      </ResponsiveContainer>
+              {/* ✅ Matching your uploaded style */}
+              <Area
+                type="monotone"
+                dataKey="current"
+                stroke="#000"
+                strokeWidth={4}
+                fill="#FFB6C1"
+                fillOpacity={0.7}
+                dot={{ r: 4, fill: "#FF69B4", stroke: "#000", strokeWidth: 1 }}
+                activeDot={{ r: 5 }}
+                name="Current Week"
+              />
+              <Area
+                type="monotone"
+                dataKey="previous"
+                stroke="#87CEFA"
+                strokeWidth={2}
+                fill="#ADD8E6"
+                fillOpacity={0.6}
+                dot={{ r: 4, fill: "#87CEFA", stroke: "#000", strokeWidth: 1 }}
+                name="Previous Week"
+              />
+            </AreaChart>
+          </ResponsiveContainer>
 
 
 
@@ -231,10 +231,14 @@ const Dashboard = () => {
               <FaUser />
             </div>
             <p>
-              Mobileapp Users: <span>{user.appUserCount}</span>
+              <span style={{
+                fontWeight: '600'
+              }}> Mobile App Users :</span> <span>{user.appUserCount}</span>
             </p>
             <p>
-              Website Users: <span>{user.webUserCount}</span>
+              <span style={{
+                fontWeight: ' 600'
+              }}> Website Users :</span>  <span>{user.webUserCount}</span>
             </p>
           </div>
 
@@ -244,10 +248,14 @@ const Dashboard = () => {
               <FaBox />
             </div>
             <p>
-              Stock In: <span>{order?.stockResponse?.stockIn}</span>
+              <span style={{
+                fontWeight: ' 600'
+              }}>  Stock In :</span> <span>{order?.stockResponse?.stockIn}</span>
             </p>
             <p>
-              Stock Out: <span>{order?.stockResponse?.stckOut}</span>
+              <span style={{
+                fontWeight: ' 600'
+              }}>    Stock Out :</span> <span>{order?.stockResponse?.stckOut}</span>
             </p>
           </div>
         </div>
@@ -334,7 +342,7 @@ const Dashboard = () => {
           </span>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

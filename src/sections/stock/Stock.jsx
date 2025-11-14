@@ -11,6 +11,7 @@ import { editStocks, getStocks } from "../../utils/api/Serviceapi";
 import { IoIosCloseCircle } from "react-icons/io";
 import Loader from '../../components/loader/Loader';
 import { set } from "date-fns";
+import { toast } from "react-toastify";
 
 const Stock = () => {
   const [open, setOpen] = useState(false);
@@ -37,10 +38,12 @@ const Stock = () => {
     setSelectedProductId(id);
     setOpen(true);
   };
-  const handleClose = () => setOpen(false);
+  const handleClose = () => (setOpen(false),
+    setSelectedProductId(null),
+    setQuantity(''));
 
   const handleUpdate = async () => {
-    if (!availableProductQuantity) return alert("Please enter available quantity");
+    if (!availableProductQuantity) return toast.error("Please enter available quantity");
     setEditLoader(true)
     try {
       const response = await editStocks(selectedProductId, {
@@ -208,11 +211,20 @@ const Stock = () => {
             fullWidth
             variant="outlined"
             value={availableProductQuantity}
-            onChange={(e) => setQuantity(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              // Allow only numbers and one optional decimal point
+              if (/^\d*\.?\d*$/.test(value)) {
+                setQuantity(value);
+              }
+            }}
+            inputProps={{
+              inputMode: "decimal", // shows numeric keypad on mobile
+              pattern: "[0-9]*",    // helps browsers restrict input
+            }}
             className={styles.textField}
           />
-
-          <Button variant="contained" className={styles.updateBtn} onClick={handleUpdate}>
+          <Button variant="contained" disabled={editLoader} style={{ cursor: editLoader ? 'not-allowed' : 'pointer', backgroundColor: editLoader ? 'gray' : '#004d25' }} className={styles.updateBtn} onClick={handleUpdate}>
             {editLoader ? 'Loading...' : 'Update'}
           </Button>
         </Box>

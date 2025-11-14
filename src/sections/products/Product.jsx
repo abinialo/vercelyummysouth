@@ -152,6 +152,7 @@ const Product = () => {
   return (
     <>
       <div className={styles.productContainer}>
+        <div className={styles.arrange}>
         <div>
           <p className="heading">Product List</p>
         </div>
@@ -160,6 +161,7 @@ const Product = () => {
           <button className="button" onClick={() => setOpenAddModal(true)}>
             Add Product
           </button>
+        </div>
         </div>
 
         <div className={styles.topContainer}>

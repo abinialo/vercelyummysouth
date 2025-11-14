@@ -1,12 +1,15 @@
 .productContainer {
-  box-shadow: 0 1px 4px #00000040;
+  /* box-shadow: 0 1px 4px #00000040; */
   background-color: #fff;
   padding: 15px;
   overflow: hidden;
   min-height: 100vh;
   /* border-radius: 10px; */
 }
-
+.arrange{
+  display:flex;
+  justify-content: space-between;
+}
 
 .tableContainer {
   padding-bottom: 10px;
@@ -19,7 +22,8 @@
 .addProduct {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 15px;
+padding-bottom:5px;
+    margin-bottom:40px;
 }
 
 @media (max-width: 600px) {

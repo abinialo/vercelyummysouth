@@ -1,11 +1,14 @@
 .container {
-  padding: 20px;
+  padding: 30px;
   font-family: "Poppins", sans-serif;
+   /* font-size: 20px;
+  font-weight: 500; */
+
 }
 
 .title {
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 500;
   margin-bottom: 15px;
 }
 
@@ -13,6 +16,9 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
+}
+.section {
+  margin-bottom: 40px;
 }
 
 .card {
@@ -62,6 +68,7 @@
   align-items: center;
   gap: 6px;
   font-size: 14px;
+  
 }
 
 .actionBtns {
@@ -107,4 +114,51 @@
   .cardWrapper {
     grid-template-columns: repeat(1, 1fr);
   }
+}
+.uploadCard {
+  display: block;
+  width: 100%;
+  cursor: pointer;
+   height: 200px;
+}
+
+.emptyCard {
+  border: 2px dashed #4caf50;
+  border-radius: 12px;
+  background-color: #f9fff9;
+  height: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: 0.3s ease;
+  padding: 15px; 
+}
+
+.emptyCard:hover {
+  background-color: #e9f7e9;
+  transform: scale(1.02);
+}
+
+.emptyIcon {
+  font-size: 24px;
+  color: #4caf50;
+  margin-bottom: 6px;
+}
+
+.emptyText {
+  font-size: 14px; /* slightly smaller text */
+  font-weight: 500;
+  color: #333;
+  margin: 4px 0;
+}
+
+.emptyNote {
+  font-size: 11px; /* smaller note */
+  color: #777;
+}
+.image {
+  object-fit: contain;
+  background: #f8f8f8;
 }

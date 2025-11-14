@@ -17,9 +17,12 @@ import {
 } from "react-icons/fa";
 import { Drawer } from 'antd';
 
+
 const Navbar = () => {
   const [isLogOpen, setLogIsOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+
   const location = useLocation();
   const navigate = useNavigate();
   const toggleSidebar = () => setIsOpen(!isOpen);
@@ -45,7 +48,8 @@ const Navbar = () => {
     { icon: <FaUsers />, label: "Customers", path: "customers" },
     { icon: <FaFileAlt />, label: "Order Details", path: "order" },
     { icon: <FaCog />, label: "Settings", path: "settings" },
-    { icon: <FaSignOutAlt />, label: "Logout", func: handleLogout },
+    { icon: <FaSignOutAlt />, label: "Logout", path: "logout" },
+ 
   ];
 
   return (
@@ -97,12 +101,16 @@ const Navbar = () => {
                     ? isOrderActive
                     : location.pathname === `/dashboard/${item.path}` ||
                     (item.path === "" && location.pathname === "/dashboard");
-                return item.label === "Logout" ? (
-                  <li key={index} className={styles.menu_item} onClick={handleLogout}>
-                    <span className={styles.icon}>{item.icon}</span>
-                    {isOpen && <span className={styles.label}>{item.label}</span>}
-                  </li>
-                ) : (
+               return item.label === "Logout" ? (
+  <li
+    key={index}
+    className={styles.menu_item}
+    onClick={() => navigate("/dashboard/logout")}
+  >
+    <span className={styles.icon}>{item.icon}</span>
+    {isOpen && <span className={styles.label}>{item.label}</span>}
+  </li>
+) : (
                   <NavLink
                     key={index}
                     to={item.path}

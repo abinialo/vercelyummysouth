@@ -107,6 +107,7 @@ const Coupon = () => {
   return (
     <>
       <div className={styles.productContainer}>
+        <div className={styles.arrange}>
         <div>
           <p className="heading">Coupon List</p>
         </div>
@@ -115,6 +116,7 @@ const Coupon = () => {
           <button className="button" onClick={handleOpenAdd}>
             Add Coupon
           </button>
+        </div>
         </div>
 
         <div className={styles.tableContainer}>

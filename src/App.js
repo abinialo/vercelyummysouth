@@ -14,7 +14,7 @@ import OrderView from "./sections/order/orderview/OrderView";
 import PrivateRoute from "./utils/PrivateRoute";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import Logout from "./sections/logout/Logout";
 function App() {
   return (
     <>
@@ -32,6 +32,7 @@ function App() {
               <Route path="settings" element={<Settings />} />
               <Route path="master" element={<Master />} />
               <Route path="orderview/:id" element={<OrderView />} />
+              <Route path="logout" element={<Logout />} />
             </Route>
           </Route>
           <Route path="/" element={<Login />} />

@@ -110,7 +110,8 @@ const Login = () => {
               )}
             </div>
 
-            <button type="submit" disabled={loading} className={styles.loginBtn}>
+            <button type="submit"  disabled={loading} style={{ cursor: loading ? 'not-allowed' : 'pointer',backgroundColor: loading ? 'gray' : '#064635' }}
+              className={styles.loginBtn}>
               {loading ? 'Loading...' : 'LOGIN'}
             </button>
           </form>

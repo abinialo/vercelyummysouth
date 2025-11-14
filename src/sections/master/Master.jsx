@@ -338,7 +338,7 @@ const Master = () => {
                     </div>
                     <div>
                       <div >
-                        <button className="button" onClick={handleSave}>
+                        <button className="button" style={{cursor:loader?'not-allowed':'pointer',backgroundColor:loader?'gray':'#004d25'}} onClick={handleSave}>
                           {loader ? 'Loading..' : isEditMode ? "Update" : "Save"}
                         </button>
                       </div>
@@ -448,7 +448,7 @@ const Master = () => {
                     </div>
                     <div>
                       <div>
-                        <button className='button' onClick={handledeliverySave}>
+                        <button className='button' disabled={deliveryLoader} style={{cursor:deliveryLoader?'not-allowed':'pointer',backgroundColor:deliveryLoader?'gray':''}} onClick={handledeliverySave}>
                           {deliveryLoader ? 'Loading..' : isdeliveyMode ? "Update" : "Save"}
                         </button>
                       </div>

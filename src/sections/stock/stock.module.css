@@ -58,7 +58,7 @@
 }
 
 .updateBtn {
-  background-color: #004d25 !important;
+  /* background-color: #004d25 !important; */
   color: white !important;
   text-transform: none !important;
   font-weight: 500 !important;

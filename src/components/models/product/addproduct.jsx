@@ -40,7 +40,6 @@ const AddProductModal = ({
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [categories, setCategories] = useState([]);
 
-  // Fetch categories when modal opens
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -58,7 +57,6 @@ const AddProductModal = ({
     if (open) fetchCategories();
   }, [open]);
 
-  // Initialize form on modal open / close
   useEffect(() => {
     if (open && productData) {
       setFormData({
@@ -70,7 +68,7 @@ const AddProductModal = ({
         recommended: productData.recommended || false,
         imgUrl: productData.imgUrl || [],
       });
-      setPriceDetails(productData.priceDetails || []); // only for edit
+      setPriceDetails(productData.priceDetails || []); 
       setSelectedFiles(productData.imgUrl || []);
     } else if (!open) {
       setFormData({
@@ -82,7 +80,7 @@ const AddProductModal = ({
         recommended: false,
         imgUrl: [],
       });
-      setPriceDetails([]); // reset to empty
+      setPriceDetails([]);
       setErrors({});
       setSelectedFiles([]);
     }
@@ -127,31 +125,55 @@ const AddProductModal = ({
 
   // File upload
   const handleFileChange = async (e) => {
-    const files = Array.from(e.target.files);
-    if (files.length === 0) return;
+  const files = Array.from(e.target.files);
+  if (files.length === 0) return;
 
-    try {
-      const uploadData = new FormData();
-      files.forEach((file) => uploadData.append("file", file));
+  // ✅ 500KB = 500 * 1024 bytes
+  const MAX_SIZE = 500 * 1024;
+  const validFiles = [];
+  const invalidFiles = [];
 
-      const res = await uploadProductImages(uploadData);
-      const uploadedData = res?.data?.data;
-
-      if (uploadedData?.imgUrl) {
-        setFormData((prev) => ({
-          ...prev,
-          imgUrl: [...(prev.imgUrl || []), uploadedData.imgUrl],
-        }));
-        setSelectedFiles((prev) => [...prev, uploadedData.imgUrl]);
-        toast.success("Image uploaded successfully!", { autoClose: 1500 });
-      } else {
-        toast.error("Image upload failed!", { autoClose: 1500 });
-      }
-    } catch (error) {
-      console.error("File upload failed:", error);
-      toast.error("Something went wrong during file upload!");
+  files.forEach((file) => {
+    if (file.size > MAX_SIZE) {
+      invalidFiles.push(file.name);
+    } else {
+      validFiles.push(file);
     }
-  };
+  });
+
+  // Show error for invalid files
+  if (invalidFiles.length > 0) {
+    toast.error(
+      `These files exceed 500KB: ${invalidFiles.join(", ")}`,
+      { autoClose: 3000 }
+    );
+  }
+
+  // Stop if no valid files
+  if (validFiles.length === 0) return;
+
+  try {
+    const uploadData = new FormData();
+    validFiles.forEach((file) => uploadData.append("file", file));
+
+    const res = await uploadProductImages(uploadData);
+    const uploadedData = res?.data?.data;
+
+    if (uploadedData?.imgUrl) {
+      setFormData((prev) => ({
+        ...prev,
+        imgUrl: [...(prev.imgUrl || []), uploadedData.imgUrl],
+      }));
+      setSelectedFiles((prev) => [...prev, uploadedData.imgUrl]);
+      toast.success("Image uploaded successfully!", { autoClose: 1500 });
+    } else {
+      toast.error("Image upload failed!", { autoClose: 1500 });
+    }
+  } catch (error) {
+    console.error("File upload failed:", error);
+    toast.error("Something went wrong during file upload!");
+  }
+};
 
   // Remove uploaded file
   const handleRemoveFile = (index) => {
@@ -163,30 +185,38 @@ const AddProductModal = ({
   };
 
   // Form validation
-  const validateForm = () => {
-    let tempErrors = {};
+  // Form validation
+const validateForm = () => {
+  let tempErrors = {};
 
-    if (!formData.categoryId) tempErrors.categoryId = "Category is required";
-    if (!formData.productName) tempErrors.productName = "Product name is required";
-    if (!formData.status) tempErrors.status = "Status is required";
-    if (!formData.availableProductQuantity || isNaN(formData.availableProductQuantity)) {
-      tempErrors.availableProductQuantity = "Available quantity must be a number";
-    }
-    if (!formData.imgUrl || formData.imgUrl.length === 0)
-      tempErrors.imgUrl = "Please upload at least one product image";
+  if (!formData.categoryId) tempErrors.categoryId = "Category is required";
+  if (!formData.productName) tempErrors.productName = "Product name is required";
+  if (!formData.status) tempErrors.status = "Status is required";
+  if (!formData.availableProductQuantity || isNaN(formData.availableProductQuantity)) {
+    tempErrors.availableProductQuantity = "Available quantity must be a number";
+  }
+  if (!formData.imgUrl || formData.imgUrl.length === 0)
+    tempErrors.imgUrl = "Please upload at least one product image";
 
-    if (priceDetails.length) {
-      priceDetails.forEach((detail, index) => {
-        if (!detail.prodQuantity) tempErrors[`prodQuantity_${index}`] = "Quantity required";
-        if (!detail.uom) tempErrors[`uom_${index}`] = "UOM required";
-        if (detail.price === "" || detail.price <= 0) tempErrors[`price_${index}`] = "Price must be greater than 0";
-        if (detail.cutprice === "" || detail.cutprice < 0) tempErrors[`cutprice_${index}`] = "Cut price cannot be negative";
-      });
-    }
+  // ✅ Require at least one price detail
+  if (priceDetails.length === 0) {
+    tempErrors.priceDetails = "At least one price detail is required";
+  } else {
+    priceDetails.forEach((detail, index) => {
+      if (!detail.prodQuantity)
+        tempErrors[`prodQuantity_${index}`] = "Quantity required";
+      if (!detail.uom)
+        tempErrors[`uom_${index}`] = "UOM required";
+      if (detail.price === "" || detail.price <= 0)
+        tempErrors[`price_${index}`] = "Price must be greater than 0";
+      if (detail.cutprice === "" || detail.cutprice < 0)
+        tempErrors[`cutprice_${index}`] = "Cut price cannot be negative";
+    });
+  }
 
-    setErrors(tempErrors);
-    return Object.keys(tempErrors).length === 0;
-  };
+  setErrors(tempErrors);
+  return Object.keys(tempErrors).length === 0;
+};
 
   // Submit
   const handleSubmit = async () => {
@@ -316,48 +346,75 @@ const AddProductModal = ({
               onChange={(e) => setFormData({ ...formData, recommended: e.target.checked })}
             />
           </Box>
-          <Box display="flex" alignItems="center" gap={1}>
-            <Typography>Price Details</Typography>
-            <IconButton onClick={handleAddPriceDetail} sx={{ background: "#1976d2", color: "#fff", p: 1 }}>
-              <Add />
-            </IconButton>
-          </Box>
+          <Box sx={{ mt: 3 }}>
+  <Box display="flex" alignItems="center" gap={1}>
+    <Typography fontWeight="bold">Price Details</Typography>
+    <IconButton
+      onClick={handleAddPriceDetail}
+      sx={{ background: "#1976d2", color: "#fff", p: 1 }}
+    >
+      <Add />
+    </IconButton>
+  </Box>
+
+  {/* Error message shown below */}
+  {errors.priceDetails && (
+    <Typography color="error" variant="body2" sx={{ mt: 0.5, ml: 0.5 }}>
+      {errors.priceDetails}
+    </Typography>
+  )}
+</Box>
+
+
         </Box>
 
         {/* Price detail rows */}
         {priceDetails.map((detail, index) => (
           <Box key={index} sx={{ display: "grid", gridTemplateColumns: { xs: "repeat(2,1fr)", sm: "repeat(4,1fr) 40px" }, gap: 2, mt: 2 }}>
-            <TextField
-              label="Product Quantity"
-              variant="standard"
-              value={detail.prodQuantity}
-              onChange={(e) => handlePriceChange(index, "prodQuantity", e.target.value)}
-            />
-            <TextField
-              label="UOM"
-              variant="standard"
-              select
-              value={detail.uom}
-              onChange={(e) => handlePriceChange(index, "uom", e.target.value)}
-            >
-              <MenuItem value="">Select</MenuItem>
-              <MenuItem value="g">g</MenuItem>
-              <MenuItem value="kg">kg</MenuItem>
-            </TextField>
-            <TextField
-              label="Price"
-              variant="standard"
-              type="number"
-              value={detail.price}
-              onChange={(e) => handlePriceChange(index, "price", e.target.value)}
-            />
-            <TextField
-              label="Cut Price"
-              variant="standard"
-              type="number"
-              value={detail.cutprice}
-              onChange={(e) => handlePriceChange(index, "cutprice", e.target.value)}
-            />
+           <TextField
+  label="Product Quantity"
+  variant="standard"
+  value={detail.prodQuantity}
+  onChange={(e) => handlePriceChange(index, "prodQuantity", e.target.value)}
+  error={!!errors[`prodQuantity_${index}`]}
+  helperText={errors[`prodQuantity_${index}`]}
+/>
+
+<TextField
+  label="UOM"
+  variant="standard"
+  select
+  value={detail.uom}
+  onChange={(e) => handlePriceChange(index, "uom", e.target.value)}
+  error={!!errors[`uom_${index}`]}
+  helperText={errors[`uom_${index}`]}
+>
+  <MenuItem value="">Select</MenuItem>
+  <MenuItem value="nos">Nos</MenuItem>
+  <MenuItem value="g">g</MenuItem>
+  <MenuItem value="kg">kg</MenuItem>
+</TextField>
+
+<TextField
+  label="Price"
+  variant="standard"
+  type="number"
+  value={detail.price}
+  onChange={(e) => handlePriceChange(index, "price", e.target.value)}
+  error={!!errors[`price_${index}`]}
+  helperText={errors[`price_${index}`]}
+/>
+
+<TextField
+  label="Cut Price"
+  variant="standard"
+  type="number"
+  value={detail.cutprice}
+  onChange={(e) => handlePriceChange(index, "cutprice", e.target.value)}
+  error={!!errors[`cutprice_${index}`]}
+  helperText={errors[`cutprice_${index}`]}
+/>
+
             <IconButton onClick={() => handleRemovePriceDetail(index)}>
               <Delete sx={{ color: "red" }} />
             </IconButton>
