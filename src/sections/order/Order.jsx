@@ -184,34 +184,42 @@ const Order = () => {
           </div>
           <div style={{ width: '250px' }}>
             <Box >
-              <Autocomplete
-                options={[{ _id: 'all', name: 'All' }, ...customers]}
-                getOptionLabel={(option) => option?.name ?? ''}
-                value={[{ _id: 'all', name: 'All' }, ...customers].find((item) => item._id === name) || null}
-                inputValue={inputValue}
-                onInputChange={(event, newInputValue) => setInputValue(newInputValue)} // ✅ track typing
-                onChange={(event, newValue) => {
-                  const selectedId = newValue ? newValue._id : ''; // store only ID
-                  setName(selectedId);
-                  setOrders([]);
-                  setPage(1);
-                }}
-                isOptionEqualToValue={(option, value) => option._id === value._id}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    placeholder="Select customer"
-                    variant="outlined"
-                    size="small"
-                  />
-                )}
-                ListboxProps={{ style: { maxHeight: 210 } }}
-                filterOptions={(options, { inputValue }) =>
-                  options.filter((option) =>
-                    option.name?.toLowerCase().includes(inputValue.toLowerCase())
-                  )
-                }
-              />
+         <Autocomplete
+  options={[{ _id: 'all', name: 'All' }, ...customers]}
+  getOptionLabel={(option) => option?.name ?? ''}
+  value={[{ _id: 'all', name: 'All' }, ...customers].find((item) => item._id === name) || null}
+  inputValue={inputValue}
+  
+  onInputChange={(event, newInputValue) => {
+    setInputValue(newInputValue);
+
+    // FIX: Allow proper search behavior
+    if (event && event.type === "change") {
+      setName(""); 
+    }
+  }}
+
+  onChange={(event, newValue) => {
+    setName(newValue ? newValue._id : '');
+    setOrders([]);
+    setPage(1);
+  }}
+
+  isOptionEqualToValue={(option, value) => option._id === value._id}
+
+  renderInput={(params) => (
+    <TextField {...params} placeholder="Select customer" variant="outlined" size="small" />
+  )}
+
+  ListboxProps={{ style: { maxHeight: 210 } }}
+
+  filterOptions={(options, { inputValue }) =>
+    options.filter((option) =>
+      option.name?.toLowerCase().includes(inputValue.toLowerCase())
+    )
+  }
+/>
+
 
 
             </Box>

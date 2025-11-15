@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styles from "./stock.module.css";
 import { Switch } from "antd";
 import { RiEditFill } from "react-icons/ri";
-// import "antd/dist/reset.css";
 import { IoSearchSharp } from "react-icons/io5";
 import Pagination from "@mui/material/Pagination";
 import { Modal, Box, Typography, TextField, Button, IconButton } from "@mui/material";
@@ -10,7 +9,6 @@ import { Close } from "@mui/icons-material";
 import { editStocks, getStocks } from "../../utils/api/Serviceapi";
 import { IoIosCloseCircle } from "react-icons/io";
 import Loader from '../../components/loader/Loader';
-import { set } from "date-fns";
 import { toast } from "react-toastify";
 
 const Stock = () => {
@@ -194,7 +192,6 @@ const Stock = () => {
       </div>
 
 
-      {/* ✅ Edit Product Modal */}
       <Modal open={open} onClose={handleClose}>
         <Box className={styles.modalBox}>
           <div className={styles.modalHeader}>
@@ -213,14 +210,13 @@ const Stock = () => {
             value={availableProductQuantity}
             onChange={(e) => {
               const value = e.target.value;
-              // Allow only numbers and one optional decimal point
               if (/^\d*\.?\d*$/.test(value)) {
                 setQuantity(value);
               }
             }}
             inputProps={{
-              inputMode: "decimal", // shows numeric keypad on mobile
-              pattern: "[0-9]*",    // helps browsers restrict input
+              inputMode: "decimal", 
+              pattern: "[0-9]*",    
             }}
             className={styles.textField}
           />

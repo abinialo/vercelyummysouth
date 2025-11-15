@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'https://adminyummy.ddns.net/api',
+  baseURL: 'https://dev.yummysouth.com/api',
   
 });
 

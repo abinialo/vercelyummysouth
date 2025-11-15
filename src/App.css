@@ -103,6 +103,14 @@ img {
 .ant-picker:hover {
   border-color: black !important;
 }
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: black !important;
+  box-shadow: none !important;
+}
+.MuiAutocomplete-root .MuiOutlinedInput-root:focus-within {
+  box-shadow: none !important;
+}
+
 .MuiTabs-list {
   justify-content: space-around !important;
 }

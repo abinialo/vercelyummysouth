@@ -82,7 +82,6 @@ const Master = () => {
     try {
       const response = await Category(search)
       setCategory(response.data.data)
-      // console.log(response.data.data)
       setCategoryLoader(false)
     } catch (error) {
       console.log(error)
@@ -109,11 +108,9 @@ const Master = () => {
   const aadharfile = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
     try {
       const res = await uploadFile(file);
       const imageUrl = res.data?.data?.imgUrl;
-
       if (imageUrl) {
         setAddCategory(prev => ({
           ...prev,
@@ -338,7 +335,7 @@ const Master = () => {
                     </div>
                     <div>
                       <div >
-                        <button className="button" style={{cursor:loader?'not-allowed':'pointer',backgroundColor:loader?'gray':'#004d25'}} onClick={handleSave}>
+                        <button className="button" style={{ cursor: loader ? 'not-allowed' : 'pointer', backgroundColor: loader ? 'gray' : '#004d25' }} onClick={handleSave}>
                           {loader ? 'Loading..' : isEditMode ? "Update" : "Save"}
                         </button>
                       </div>
@@ -448,7 +445,7 @@ const Master = () => {
                     </div>
                     <div>
                       <div>
-                        <button className='button' disabled={deliveryLoader} style={{cursor:deliveryLoader?'not-allowed':'pointer',backgroundColor:deliveryLoader?'gray':''}} onClick={handledeliverySave}>
+                        <button className='button' disabled={deliveryLoader} style={{ cursor: deliveryLoader ? 'not-allowed' : 'pointer', backgroundColor: deliveryLoader ? 'gray' : '' }} onClick={handledeliverySave}>
                           {deliveryLoader ? 'Loading..' : isdeliveyMode ? "Update" : "Save"}
                         </button>
                       </div>
