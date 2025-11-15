@@ -44,7 +44,7 @@ const Login = () => {
       try {
         const response = await LoginUser(email, password)
         console.log(response)
-        localStorage.setItem("isLoggedIn", "true");
+        sessionStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("userid", response.data.data.data.userId);
         navigate("/dashboard");
         toast.success("Login successful!");

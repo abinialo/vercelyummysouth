@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './navbar.module.css';
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../../assets/YS LOGO green.png';
@@ -16,29 +16,53 @@ import {
   FaSignOutAlt
 } from "react-icons/fa";
 import { Drawer } from 'antd';
+import { Modal, Input, Button } from "antd";
+import { CiLogout } from "react-icons/ci";
 
+import { HiOutlineLogout } from "react-icons/hi";
 
 const Navbar = () => {
   const [isLogOpen, setLogIsOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [logoutModalOpen, setLogoutModalOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const logoutRef = useRef(null);
 
   const location = useLocation();
   const navigate = useNavigate();
   const toggleSidebar = () => setIsOpen(!isOpen);
   const handleLogout = () => {
     localStorage.removeItem("isLoggedIn");
-    navigate("/");
+    localStorage.removeItem("userid")
+    setLogoutModalOpen(true)
+    setOpen(false);
   };
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (logoutRef.current && !logoutRef.current.contains(e.target)) {
+        setLogIsOpen(false); // close dropdown
+      }
+    }
 
-  const [open, setOpen] = useState(false);
+    if (isLogOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isLogOpen]);
   const showDrawer = () => {
     setOpen(true);
   };
   const onClose = () => {
     setOpen(false);
   };
-
+  useEffect(() => {
+    return () => {
+      sessionStorage.removeItem("adminTab");
+    };
+  }, []);
   const menuItems = [
     { icon: <FaChartLine />, label: "Dashboard", path: "" },
     { icon: <FaUser />, label: "Master", path: "master" },
@@ -48,8 +72,8 @@ const Navbar = () => {
     { icon: <FaUsers />, label: "Customers", path: "customers" },
     { icon: <FaFileAlt />, label: "Order Details", path: "order" },
     { icon: <FaCog />, label: "Settings", path: "settings" },
-    { icon: <FaSignOutAlt />, label: "Logout", path: "logout" },
- 
+    { icon: <FaSignOutAlt />, label: "Logout", },
+
   ];
 
   return (
@@ -63,15 +87,22 @@ const Navbar = () => {
               </Link>
             </div>
           </div>
-          <div className={styles.user}>
+          <div className={styles.user} ref={logoutRef}>
             <FaUserCircle
               style={{ fontSize: '19px', cursor: 'pointer' }}
-              onClick={() => setLogIsOpen(!isLogOpen)}
               title='Admin'
+              onClick={() => { setLogIsOpen(!isLogOpen) }}
             />
+            {/* <HiOutlineLogout style={{ fontSize: '19px',fontWeight: 'bold', cursor: 'pointer' }}
+              onClick={() => { setLogoutModalOpen(true) }} /> */}
+
+
             {isLogOpen && (
               <div className={styles.logoutdiv}>
-                <p onClick={handleLogout} >Logout</p>
+                <p
+                  onClick={() => { setLogoutModalOpen(true); setLogIsOpen(false) }}
+                  className={styles.logout}
+                >Logout</p>
               </div>
             )}
           </div>
@@ -101,16 +132,16 @@ const Navbar = () => {
                     ? isOrderActive
                     : location.pathname === `/dashboard/${item.path}` ||
                     (item.path === "" && location.pathname === "/dashboard");
-               return item.label === "Logout" ? (
-  <li
-    key={index}
-    className={styles.menu_item}
-    onClick={() => navigate("/dashboard/logout")}
-  >
-    <span className={styles.icon}>{item.icon}</span>
-    {isOpen && <span className={styles.label}>{item.label}</span>}
-  </li>
-) : (
+                return item.label === "Logout" ? (
+                  <li
+                    key={index}
+                    className={styles.menu_item}
+                    onClick={() => setLogoutModalOpen(true)}
+                  >
+                    <span className={styles.icon}>{item.icon}</span>
+                    {isOpen && <span className={styles.label}>{item.label}</span>}
+                  </li>
+                ) : (
                   <NavLink
                     key={index}
                     to={item.path}
@@ -134,6 +165,42 @@ const Navbar = () => {
           <Outlet />
         </div>
       </div>
+
+      <Modal
+        open={logoutModalOpen}
+        footer={null}
+        centered
+        onCancel={() => setLogoutModalOpen(false)}
+      >
+        <p style={{ textAlign: 'center', marginBottom: '0px', fontSize: '16px' }}>Are you sure you want to logout?</p>
+
+        <div style={{ display: "flex", justifyContent: "center", gap: "10px", margin: "30px 0" }}>
+          <button
+            style={{
+              border: "1px solid #ccc",
+              background: "white",
+              color: "#333",
+              padding: "6px 16px",
+              borderRadius: "6px",
+              cursor: "pointer",
+            }}
+            onClick={() => setLogoutModalOpen(false)}
+          >
+            Cancel
+          </button>
+
+          <button
+            className="button"
+            onClick={() => {
+              sessionStorage.removeItem("isLoggedIn");
+              localStorage.removeItem("userid");
+              navigate("/");
+            }}
+          >
+            Logout
+          </button>
+        </div>
+      </Modal>
 
       <div>
 
@@ -166,15 +233,15 @@ const Navbar = () => {
                 className={
                   isActive ? `${styles.menu_link} ${styles.active}` : styles.menu_link
                 }
-              
+
               >
-                <li className={styles.menu_item}   onClick={onClose}>
+                <li className={styles.menu_item} onClick={onClose}>
                   <span className={styles.icon}>{item.icon}</span>
                   {isOpen && <span className={styles.label}>{item.label}</span>}
                 </li>
               </NavLink>
             );
-          })} 
+          })}
         </Drawer>
       </div>
     </>

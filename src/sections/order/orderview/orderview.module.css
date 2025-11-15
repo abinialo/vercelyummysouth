@@ -1,7 +1,7 @@
 .orderHead {
   display: flex;
   gap: 40px;
-  align-items: baseline;
+  align-items: center;
 }
 .orderId {
   color: rgba(0, 0, 0, 0.5);

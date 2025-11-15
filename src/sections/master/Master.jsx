@@ -13,7 +13,7 @@ import cloud from '../../assets/up-arrow.png'
 import { Addcategory, Adddelivery, Category, Deletecategory, Deletedelivery, deliveryCharge, Editcategory, Editdelivery, uploadFile } from '../../utils/api/Serviceapi';
 import { toast } from 'react-toastify';
 import { IoIosCloseCircle } from "react-icons/io";
-import { Modal } from 'antd';
+import { Modal, Input, Button } from "antd";
 import Loader from '../../components/loader/Loader';
 
 const Master = () => {
@@ -30,6 +30,17 @@ const Master = () => {
     state: '',
     deliveryCharge: '',
   })
+
+  useEffect(() => {
+    const savedTab = sessionStorage.getItem("adminTab");
+
+    if (savedTab) {
+      setValue(savedTab);
+    } else {
+      setValue("1");
+    }
+  }, []);
+
   const [deleteConfirmVisible, setDeleteConfirmVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedDelivery, setSelectedDelivery] = useState(null);
@@ -44,6 +55,7 @@ const Master = () => {
       state: false,
       deliveryCharge: false,
     });
+    sessionStorage.setItem("adminTab", newValue);
     setAddCategory({
       categoryName: '',
       imgUrl: '',
@@ -216,9 +228,9 @@ const Master = () => {
     });
     setEditId(item._id);
     setIsEditMode(true);
-    console.log('e')
-
+    setCategoryModalOpen(true);
   };
+
 
   const handledeliveryEdit = (item) => {
     setAddDelivery({
@@ -227,9 +239,9 @@ const Master = () => {
     });
     setDeliveryId(item._id);
     setIsdeliveryMode(true);
-    console.log('e')
-
+    setDeliveryModalOpen(true);
   };
+
   const handleDelete = (product) => {
     setSelectedProduct(product);
     setDeleteConfirmVisible(true);
@@ -281,6 +293,9 @@ const Master = () => {
     console.log('e')
 
   };
+  const [categoryModalOpen, setCategoryModalOpen] = useState(false);
+  const [deliveryModalOpen, setDeliveryModalOpen] = useState(false);
+
   return (
     <>
       <div className={styles.productContainer}>
@@ -295,52 +310,24 @@ const Master = () => {
               </Box>
               <TabPanel value="1" >
                 <div>
-                  <div>
-                    <p className='heading'>Category</p>
-                  </div>
-                  <div className={styles.deliveryForm}>
+                  <div className={styles.formContainer}>
                     <div>
-                      <div>
-                        <input className={styles.input} style={{ border: error && '1px solid red' }} value={addCategory.categoryName}
-                          onChange={(e) => {
-                            setAddCategory({ ...addCategory, categoryName: e.target.value });
-                            if (!e.target.value.trim()) {
-                              setError(true);
-                            } else {
-                              setError(false);
-                            }
-                          }} type="text" placeholder='Enter Category Name' />
-                      </div>
+                      <p className='heading'>Category</p>
                     </div>
                     <div>
-                      {addCategory.imgUrl ?
+                      <button
+                        className="button"
+                        onClick={() => {
+                          setCategoryModalOpen(true);
+                          setIsEditMode(false);
+                          setAddCategory({ categoryName: "", imgUrl: "" });
+                        }}
+                      >
+                        Add Category
+                      </button>
+                    </div>
+                  </div>
 
-                        <div className={styles.uploadContainer} >
-                          <label htmlFor="fileUpload" className={styles.uploadBox}  >
-                            <div className={styles.cloud}>
-                              <img src={addCategory.imgUrl} alt="" />
-                            </div>
-                            <input type="file" onChange={aadharfile} id="fileUpload" className={styles.fileInput} />
-                          </label>
-                        </div> :
-                        <div className={styles.uploadContainer}>
-                          <label htmlFor="fileUpload" className={styles.uploadBox} style={{ border: imgError && '1px dashed red' }}>
-                            <div className={styles.cloud}>
-                              <img src={cloud} alt="" />
-                            </div>
-                            <input type="file" onChange={(e) => { aadharfile(e); setimgError(false) }} id="fileUpload" className={styles.fileInput} />
-                          </label>
-                        </div>
-                      }
-                    </div>
-                    <div>
-                      <div >
-                        <button className="button" style={{ cursor: loader ? 'not-allowed' : 'pointer', backgroundColor: loader ? 'gray' : '#004d25' }} onClick={handleSave}>
-                          {loader ? 'Loading..' : isEditMode ? "Update" : "Save"}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
                   <div>
                     <div style={{ width: '400px', margin: '15px 0px' }} className={styles.searchContainer}>
                       <div className='search'>
@@ -392,65 +379,24 @@ const Master = () => {
               </TabPanel>
               <TabPanel value="2" >
                 <div>
-                  <div>
-                    <p className='heading'>Delivery Charges</p>
-                  </div>
-                  <div className={styles.deliveryForm}>
+                  <div className={styles.formContainer}>
                     <div>
-                      <label htmlFor="">States</label>
-                      <div>
-                        <input
-                          type="text"
-                          value={adddelivery.state}
-                          onChange={(e) => {
-                            const onlyLetters = e.target.value.replace(/[^a-zA-Z\s]/g, '');
-                            setAddDelivery({ ...adddelivery, state: onlyLetters });
-                            setDeliveryerror({ ...deliveryerror, state: false })
-                            if (!onlyLetters.trim()) {
-                              setDeliveryerror({ ...deliveryerror, state: true });
-                            } else {
-                              setDeliveryerror({ ...deliveryerror, state: false });
-                            }
-                          }}
-                          className={styles.input}
-                          placeholder='Enter States'
-                          style={{ border: deliveryerror.state && '1px solid red' }}
-                        />
-                      </div>
+                      <p className='heading'>Delivery Charges</p>
                     </div>
                     <div>
-                      <label htmlFor="">Delivery Charges</label>
-                      <div>
-                        <input
-                          type="text"
-                          value={adddelivery.deliveryCharge}
-                          onChange={(e) => {
-                            const onlyNums = e.target.value.replace(/[^0-9]/g, '');
-                            setAddDelivery({ ...adddelivery, deliveryCharge: onlyNums });
-                            setDeliveryerror({ ...deliveryerror, deliveryCharge: false })
-                            if (!onlyNums.trim()) {
-                              setDeliveryerror({ ...deliveryerror, deliveryCharge: true });
-                            } else {
-                              setDeliveryerror({ ...deliveryerror, deliveryCharge: false });
-                            }
-                          }}
-                          className={styles.input}
-                          placeholder='Enter delivery Charges'
-                          style={{ border: deliveryerror.deliveryCharge && '1px solid red' }}
+                      <button
+                        className="button"
+                        onClick={() => {
+                          setDeliveryModalOpen(true);
+                          setIsdeliveryMode(false);
+                          setAddDelivery({ state: "", deliveryCharge: "" });
+                        }}
+                      >
+                        Add Delivery Charge
+                      </button>
+                    </div>
+                  </div>
 
-                        />
-                        {/* <input type="text" className={styles.input} value={adddelivery.deliveryCharge} 
-                        onChange={(e) => setAddDelivery({ ...adddelivery, deliveryCharge: e.target.value })} placeholder='Enter delivery Charges' /> */}
-                      </div>
-                    </div>
-                    <div>
-                      <div>
-                        <button className='button' disabled={deliveryLoader} style={{ cursor: deliveryLoader ? 'not-allowed' : 'pointer', backgroundColor: deliveryLoader ? 'gray' : '' }} onClick={handledeliverySave}>
-                          {deliveryLoader ? 'Loading..' : isdeliveyMode ? "Update" : "Save"}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
                   <div>
                     <div style={{ width: '400px', margin: '15px 0px' }} className={styles.searchContainer}>
                       <div className='search'>
@@ -503,6 +449,103 @@ const Master = () => {
 
         </div>
       </div>
+      <Modal
+        styles={{
+          header: { textAlign: "center" },
+          body: { fontSize: "16px", },
+        }}
+        open={categoryModalOpen}
+        onCancel={() => setCategoryModalOpen(false)}
+        footer={null}
+        centered
+        title={
+          <span style={{ fontWeight: "600", color: "#0B6623" }}>
+            {isEditMode ? "Edit Category" : "Add Category"}
+          </span>
+        }
+      >
+
+        {/* Your exact form inside modal */}
+        <div className={styles.deliveryForm}>
+          <div>
+            <div>
+              <input
+                className={styles.input}
+                style={{ border: error && "1px solid red" }}
+                value={addCategory.categoryName}
+                onChange={(e) => {
+                  setAddCategory({ ...addCategory, categoryName: e.target.value });
+                  if (!e.target.value.trim()) {
+                    setError(true);
+                  } else {
+                    setError(false);
+                  }
+                }}
+                type="text"
+                placeholder="Enter Category Name"
+              />
+            </div>
+          </div>
+
+          <div>
+            {addCategory.imgUrl ? (
+              <div className={styles.uploadContainer}>
+                <label htmlFor="fileUpload" className={styles.uploadBox}>
+                  <div className={styles.cloud}>
+                    <img src={addCategory.imgUrl} alt="" />
+                  </div>
+                  <input
+                    type="file"
+                    onChange={aadharfile}
+                    id="fileUpload"
+                    className={styles.fileInput}
+                  />
+                </label>
+              </div>
+            ) : (
+              <div className={styles.uploadContainer}>
+                <label
+                  htmlFor="fileUpload"
+                  className={styles.uploadBox}
+                  style={{ border: imgError && "1px dashed red" }}
+                >
+                  <div className={styles.cloud}>
+                    <img src={cloud} alt="" />
+                  </div>
+                  <input
+                    type="file"
+                    onChange={(e) => {
+                      aadharfile(e);
+                      setimgError(false);
+                    }}
+                    id="fileUpload"
+                    className={styles.fileInput}
+                  />
+                </label>
+              </div>
+            )}
+          </div>
+
+          <div>
+            <button
+              className="button"
+              style={{
+                cursor: loader ? "not-allowed" : "pointer",
+                backgroundColor: loader ? "gray" : "#004d25",
+              }}
+              onClick={async () => {
+                await handleSave();
+                if (!error && addCategory.categoryName && addCategory.imgUrl) {
+                  setCategoryModalOpen(false); // Close modal on success
+                }
+              }}
+            >
+              {loader ? "Loading.." : isEditMode ? "Update" : "Save"}
+            </button>
+          </div>
+        </div>
+      </Modal>
+
 
       <Modal
         open={deleteConfirmVisible}
@@ -546,15 +589,7 @@ const Master = () => {
 
           <button
             onClick={confirmDelete}
-            style={{
-              backgroundColor: "#0B6623",
-              color: "white",
-              padding: "6px 16px",
-              border: "none",
-              borderRadius: "6px",
-              cursor: "pointer",
-              fontWeight: "600",
-            }}
+            className='button'
           >
             Delete
           </button>
@@ -572,7 +607,7 @@ const Master = () => {
         }}
         title={
           <span style={{ fontWeight: "600", color: "#0B6623" }}>
-            Confirm Deletes
+            Confirm Delete
           </span>
         }
       >
@@ -603,19 +638,94 @@ const Master = () => {
 
           <button
             onClick={handledeliveryDelete}
-            style={{
-              backgroundColor: "#0B6623",
-              color: "white",
-              padding: "6px 16px",
-              border: "none",
-              borderRadius: "6px",
-              cursor: "pointer",
-              fontWeight: "600",
-            }}
+            className='button'
           >
             Delete
           </button>
         </div>
+      </Modal>
+
+      <Modal
+        open={deliveryModalOpen}
+        onCancel={() => setDeliveryModalOpen(false)}
+        footer={null}
+        centered
+        styles={{
+          header: { textAlign: "center" },
+          body: { fontSize: "16px", },
+        }}
+        title={
+          <span style={{ fontWeight: "600", color: "#0B6623" }}>
+            {isdeliveyMode ? "Edit Delivery Charge" : "Add Delivery Charge"}          </span>
+        }
+      >
+
+        <div className={styles.deliveryForm}>
+          {/* State Input */}
+          <div>
+            <label>States</label>
+            <div>
+              <input
+                type="text"
+                value={adddelivery.state}
+                onChange={(e) => {
+                  const onlyLetters = e.target.value.replace(/[^a-zA-Z\s]/g, '');
+                  setAddDelivery({ ...adddelivery, state: onlyLetters });
+
+                  setDeliveryerror({ ...deliveryerror, state: !onlyLetters.trim() });
+                }}
+                className={styles.input}
+                placeholder="Enter States"
+                style={{ border: deliveryerror.state && "1px solid red" }}
+              />
+            </div>
+          </div>
+
+          {/* Delivery Charge Input */}
+          <div>
+            <label>Delivery Charges</label>
+            <div>
+              <input
+                type="text"
+                value={adddelivery.deliveryCharge}
+                onChange={(e) => {
+                  const onlyNums = e.target.value.replace(/[^0-9]/g, '');
+                  setAddDelivery({ ...adddelivery, deliveryCharge: onlyNums });
+
+                  setDeliveryerror({ ...deliveryerror, deliveryCharge: !onlyNums.trim() });
+                }}
+                className={styles.input}
+                placeholder="Enter Delivery Charges"
+                style={{ border: deliveryerror.deliveryCharge && "1px solid red" }}
+              />
+            </div>
+          </div>
+
+          {/* Save Button */}
+          <div>
+            <button
+              className="button"
+              disabled={deliveryLoader}
+              style={{
+                cursor: deliveryLoader ? "not-allowed" : "pointer",
+                backgroundColor: deliveryLoader ? "gray" : "#004d25"
+              }}
+              onClick={async () => {
+                await handledeliverySave();
+
+                if (
+                  adddelivery.state.trim() &&
+                  adddelivery.deliveryCharge.trim()
+                ) {
+                  setDeliveryModalOpen(false);
+                }
+              }}
+            >
+              {deliveryLoader ? "Loading.." : isdeliveyMode ? "Update" : "Save"}
+            </button>
+          </div>
+        </div>
+
       </Modal>
 
     </>

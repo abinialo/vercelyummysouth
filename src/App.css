@@ -128,4 +128,7 @@ img {
   color: #06402b;
   font-size: 20px;
 }
+.ant-drawer .ant-drawer-body{
+  padding: 0px !important;
+}
 

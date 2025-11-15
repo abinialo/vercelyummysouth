@@ -6,9 +6,11 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { FaLocationDot } from "react-icons/fa6";
 import { FaUserCircle } from "react-icons/fa";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Orderbyid, updateStatus } from '../../../utils/api/Serviceapi';
 import Loader from '../../../components/loader/Loader';
+import { FaArrowLeft } from "react-icons/fa6";
+
 const OrderView = () => {
     const [orderStatus, setStatus] = useState('');
     const handleStatusChange = (event) => {
@@ -20,6 +22,7 @@ const OrderView = () => {
     const { id } = useParams();
 
     console.log(id);
+    const navigate = useNavigate();
 
     const [orders, setOrders] = useState({});
 
@@ -66,7 +69,12 @@ const OrderView = () => {
                 <div>
                     <div className={styles.orderHead}>
                         <div>
-                            <p className='heading'>Order List</p>
+                            <p className='heading' style={{ display: "flex", alignItems: "center", gap: '5px' }}>
+                                <FaArrowLeft
+                                    style={{ fontSize: '16px', cursor: "pointer" }}
+                                    onClick={() => navigate(-1)}
+                                />
+                                Order List</p>
                         </div>
                         <div>
                             <button
@@ -168,7 +176,7 @@ const OrderView = () => {
                                         </Box>
 
                                         <div className={styles.save}>
-                                            <button onClick={update} disabled={loader} style={{cursor:loader ?'not-allowed':'pointer', backgroundColor: loader ? 'gray' : 'red'}}>{loader ? "Updating..." : "Save"}</button>
+                                            <button onClick={update} disabled={loader} style={{ cursor: loader ? 'not-allowed' : 'pointer', backgroundColor: loader ? 'gray' : 'red' }}>{loader ? "Updating..." : "Save"}</button>
                                         </div>
                                     </div>
                                 </div>

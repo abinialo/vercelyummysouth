@@ -195,7 +195,7 @@ const Stock = () => {
       <Modal open={open} onClose={handleClose}>
         <Box className={styles.modalBox}>
           <div className={styles.modalHeader}>
-            <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+            <Typography variant="h6" sx={{ fontWeight: "bold",color: "#0B6623",textAlign: "center" }}>
               Edit Product
             </Typography>
             <IconButton onClick={handleClose}>

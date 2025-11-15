@@ -214,7 +214,10 @@
   .card {
     width: 45%;
   }
-
+ .cardcontainer {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
   .chartBox {
     /* width: 100%; */
   }

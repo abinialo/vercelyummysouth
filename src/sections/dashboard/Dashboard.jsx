@@ -294,7 +294,7 @@ const Dashboard = () => {
                         : item?.orderStatus?.toLowerCase() === "assigned"
                           ? "orange"
                           : item?.orderStatus?.toLowerCase() === "inprogress"
-                            ? "gray"
+                            ? "#37c5fdff"
                             : item?.orderStatus?.toLowerCase() === "delivered"
                               ? "green"
                               : item?.orderStatus?.toLowerCase() === "cancelled"
