@@ -12,12 +12,14 @@ import Settings from "./sections/settings/Settings";
 import Master from "./sections/master/Master";
 import OrderView from "./sections/order/orderview/OrderView";
 import PrivateRoute from "./utils/PrivateRoute";
+import ScrollToTop from "./utils/ScrollToTop"; 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 function App() {
   return (
     <>
       <Router>
+              <ScrollToTop /> 
         <Routes>
           <Route element={<PrivateRoute />}>
             <Route path="/dashboard" element={<Navbar />}>

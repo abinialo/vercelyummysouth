@@ -141,7 +141,7 @@ const AddProductModal = ({
     }
   });
 
-  // Show error for invalid files
+  
   if (invalidFiles.length > 0) {
     toast.error(
       `These files exceed 500KB: ${invalidFiles.join(", ")}`,
@@ -149,7 +149,7 @@ const AddProductModal = ({
     );
   }
 
-  // Stop if no valid files
+
   if (validFiles.length === 0) return;
 
   try {
@@ -175,7 +175,7 @@ const AddProductModal = ({
   }
 };
 
-  // Remove uploaded file
+
   const handleRemoveFile = (index) => {
     setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
     setFormData((prev) => ({
@@ -184,8 +184,7 @@ const AddProductModal = ({
     }));
   };
 
-  // Form validation
-  // Form validation
+ 
 const validateForm = () => {
   let tempErrors = {};
 
@@ -198,7 +197,7 @@ const validateForm = () => {
   if (!formData.imgUrl || formData.imgUrl.length === 0)
     tempErrors.imgUrl = "Please upload at least one product image";
 
-  // ✅ Require at least one price detail
+
   if (priceDetails.length === 0) {
     tempErrors.priceDetails = "At least one price detail is required";
   } else {
@@ -218,7 +217,7 @@ const validateForm = () => {
   return Object.keys(tempErrors).length === 0;
 };
 
-  // Submit
+
   const handleSubmit = async () => {
     if (!validateForm()) {
       toast.error(`Failed to ${title.toLowerCase()} — missing fields!`);
@@ -282,13 +281,13 @@ const validateForm = () => {
           p: { xs: 2, sm: 3, md: 4 },
         }}
       >
-        {/* Header */}
+       
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography variant="h6" fontWeight="bold">{title}</Typography>
           <IconButton onClick={handleClose}><Close sx={{ color: "green" }} /></IconButton>
         </Box>
 
-        {/* Category / Name / Status */}
+      
         <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }, gap: 2, mt: 2 }}>
           <TextField
             name="categoryId"
@@ -327,7 +326,7 @@ const validateForm = () => {
           </TextField>
         </Box>
 
-        {/* Quantity / Recommended / Price Details */}
+       
         <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", mt: 3, gap: 2 }}>
           <TextField
             name="availableProductQuantity"
@@ -357,7 +356,6 @@ const validateForm = () => {
     </IconButton>
   </Box>
 
-  {/* Error message shown below */}
   {errors.priceDetails && (
     <Typography color="error" variant="body2" sx={{ mt: 0.5, ml: 0.5 }}>
       {errors.priceDetails}
@@ -368,7 +366,7 @@ const validateForm = () => {
 
         </Box>
 
-        {/* Price detail rows */}
+  
         {priceDetails.map((detail, index) => (
           <Box key={index} sx={{ display: "grid", gridTemplateColumns: { xs: "repeat(2,1fr)", sm: "repeat(4,1fr) 40px" }, gap: 2, mt: 2 }}>
            <TextField
@@ -421,7 +419,7 @@ const validateForm = () => {
           </Box>
         ))}
 
-        {/* Description */}
+      
         <TextField
           name="description"
           label="Description"
@@ -434,7 +432,6 @@ const validateForm = () => {
           onChange={handleInputChange}
         />
 
-        {/* Upload Images */}
         <Box sx={{ mt: 3 }}>
           <Typography fontWeight="bold">Upload Images</Typography>
           <Box
@@ -474,7 +471,6 @@ const validateForm = () => {
           )}
         </Box>
 
-        {/* Buttons */}
         <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2, mt: 4 }}>
           <Button variant="outlined" onClick={handleClose}>CANCEL</Button>
           <Button

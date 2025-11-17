@@ -184,41 +184,42 @@ const Order = () => {
           </div>
           <div style={{ width: '250px' }}>
             <Box >
-         <Autocomplete
-  options={[{ _id: 'all', name: 'All' }, ...customers]}
-  getOptionLabel={(option) => option?.name ?? ''}
-  value={[{ _id: 'all', name: 'All' }, ...customers].find((item) => item._id === name) || null}
-  inputValue={inputValue}
-  
-  onInputChange={(event, newInputValue) => {
-    setInputValue(newInputValue);
+              <Autocomplete
+                options={[{ _id: 'all', name: 'All' }, ...customers]}
+                getOptionLabel={(option) => option?.name ?? ''}
+                value={[{ _id: 'all', name: 'All' }, ...customers].find((item) => item._id === name) || null}
+                inputValue={inputValue}
 
-    // FIX: Allow proper search behavior
-    if (event && event.type === "change") {
-      setName(""); 
-    }
-  }}
+                onInputChange={(event, newInputValue) => {
+                  setInputValue(newInputValue);
 
-  onChange={(event, newValue) => {
-    setName(newValue ? newValue._id : '');
-    setOrders([]);
-    setPage(1);
-  }}
+                  // FIX: Allow proper search behavior
+                  if (event && event.type === "change") {
+                    setName("");
+                  }
+                }}
 
-  isOptionEqualToValue={(option, value) => option._id === value._id}
+                onChange={(event, newValue) => {
+                  setName(newValue ? newValue._id : '');
+                  setOrders([]);
+                  setPage(1);
+                }}
 
-  renderInput={(params) => (
-    <TextField {...params} placeholder="Select customer" variant="outlined" size="small" />
-  )}
+                isOptionEqualToValue={(option, value) => option._id === value._id}
 
-  ListboxProps={{ style: { maxHeight: 210 } }}
+                renderInput={(params) => (
+                  <TextField {...params} placeholder="Select customer" variant="outlined" size="small" />
+                )}
 
-  filterOptions={(options, { inputValue }) =>
-    options.filter((option) =>
-      option.name?.toLowerCase().includes(inputValue.toLowerCase())
-    )
-  }
-/>
+                ListboxProps={{ style: { maxHeight: 210 } }}
+
+                filterOptions={(options, { inputValue }) =>
+                  options.filter((option) =>
+                    option.name?.toLowerCase().includes(inputValue.toLowerCase())
+                  )
+                }
+              />
+
 
 
 
