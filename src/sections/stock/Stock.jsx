@@ -137,9 +137,9 @@ const Stock = () => {
                           className="custom-switch"
                         />                    </td>
                       <td>
-                        {item.status === "active" ?
+                        {item.availableProductQuantity !== 0 ?
                           <button className={styles.stock}>Stock In</button>
-                          : <button className={styles.stockOut}>Stock Out</button>}
+                          : <button className={styles.stockOut}>Sold Out</button>}
                       </td>
                       <td>{item.productName}</td>
                       <td>{Number(item.availableProductQuantity || 0).toFixed(2)}</td>                    <td>{item.priceDetails[0].price} ({item.priceDetails[0].prodQuantity} {item.priceDetails[0].uom} )</td>
