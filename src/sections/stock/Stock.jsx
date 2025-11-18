@@ -142,7 +142,8 @@ const Stock = () => {
                           : <button className={styles.stockOut}>Sold Out</button>}
                       </td>
                       <td>{item.productName}</td>
-                      <td>{Number(item.availableProductQuantity || 0).toFixed(2)}</td>                    <td>{item.priceDetails[0].price} ({item.priceDetails[0].prodQuantity} {item.priceDetails[0].uom} )</td>
+                      <td>{Number(item.availableProductQuantity || 0).toFixed(2)}</td>                   
+                       <td>{item.priceDetails[0].price} ({item.priceDetails[0].prodQuantity} {item.priceDetails[0].uom} )</td>
                       <td>
                         <div className={styles.action}>
                           <RiEditFill className={styles.edit} onClick={() => handleOpen(item._id)} />

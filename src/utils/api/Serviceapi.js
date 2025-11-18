@@ -168,8 +168,8 @@ export const Deletedelivery = (value) => {
   return apiService.delete(`/deliveryCharge/${value}`);
 };
 
-export const dropDown = () => {
-  return apiService.get(`/user/dropDown?role=consumer,webconsumer`);
+export const dropDown = (name) => {
+  return apiService.get(`/user/dropDown?role=consumer,webconsumer&value=${name}`);
 };
 
 export const Orderbyid = (id) => {

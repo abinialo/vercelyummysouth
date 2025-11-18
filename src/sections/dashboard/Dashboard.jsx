@@ -17,6 +17,8 @@ import img2 from "../../assets/dashboard/Vector2.png";
 import img3 from "../../assets/dashboard/vector3.png";
 import { FaUser, FaBox } from "react-icons/fa";
 import { getOrderDashboard, orderDashboard, userDashboard } from "../../utils/api/Serviceapi";
+import { BiExpandAlt } from "react-icons/bi";
+import { Link } from "react-router-dom";
 
 
 
@@ -270,7 +272,7 @@ const Dashboard = () => {
               <th>Order Id</th>
               <th>Price</th>
               <th>Quantity</th>
-              <th>Status</th>
+              <th className={styles.statusColumn}>Status <Link to="order"><BiExpandAlt className={styles.expandIcon}/></Link></th>
             </tr>
           </thead>
           <tbody>

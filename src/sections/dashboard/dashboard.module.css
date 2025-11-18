@@ -209,7 +209,19 @@
 .paginationIcons:hover {
   color: #13812d;
 }
-
+.statusColumn{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  justify-content: space-between;
+}
+.statusColumn a{
+  color:white;
+}
+.expandIcon{
+  font-size: 20px;
+  cursor: pointer;
+}
 @media (max-width: 1024px) {
   .card {
     width: 45%;

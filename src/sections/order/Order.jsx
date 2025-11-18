@@ -123,7 +123,7 @@ const Order = () => {
   const getCustomer = async () => {
     try {
 
-      const response = await dropDown()
+      const response = await dropDown(name)
       setCustomers(response.data?.data)
 
     } catch (error) {
@@ -133,7 +133,7 @@ const Order = () => {
 
   useEffect(() => {
     getCustomer()
-  }, [])
+  }, [name])
 
   const [inputValue, setInputValue] = useState('');
 
