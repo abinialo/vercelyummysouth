@@ -125,7 +125,7 @@ const Coupon = () => {
               <tr className="tablehead">
                 <th>No.</th>
                 <th>Item Name</th>
-                <th>Base Price</th>
+                <th>Coupon Code</th>
                 <th>Amount</th>
                 <th>Start Date</th>
                 <th>End Date</th>
@@ -146,7 +146,7 @@ const Coupon = () => {
       <tr key={coupon._id || index} className="tabledata">
         <td>{indexOfFirstItem + index}</td>
         <td>{coupon.name}</td>
-        <td>{coupon.basePrice}</td>
+        <td>{coupon.couponCode}</td>
         <td>
           {coupon.type === "percentage"
             ? `${coupon.amount}%`

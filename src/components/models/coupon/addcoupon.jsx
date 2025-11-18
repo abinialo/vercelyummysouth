@@ -17,7 +17,7 @@ const AddCouponModal = ({ open, handleClose, editData, refreshCoupons }) => {
   
   const initialForm = {
     couponName: "",
-    basePrice: "", 
+    couponCode: "", 
     amount: "",
     type: "",
     fromDate: "",
@@ -34,7 +34,7 @@ const AddCouponModal = ({ open, handleClose, editData, refreshCoupons }) => {
       if (editData) {
         setFormData({
           couponName: editData.name || "",
-          basePrice: editData.couponCode || "",
+          couponCode: editData.couponCode || "",
           amount: editData.amount || "",
           type: editData.type || "",
           fromDate: editData.startDate?.split("T")[0] || "",
@@ -71,7 +71,7 @@ const AddCouponModal = ({ open, handleClose, editData, refreshCoupons }) => {
    
     const payload = {
       name: formData.couponName,
-      couponCode: formData.basePrice, 
+      couponCode: formData.couponCode, 
       amount: formData.amount,
       type: formData.type,
       startDate: formData.fromDate,
@@ -116,7 +116,7 @@ const AddCouponModal = ({ open, handleClose, editData, refreshCoupons }) => {
         <Box className={styles.formGrid}>
           {[
             { label: "Coupon Name", name: "couponName" },
-            { label: "Base Price", name: "basePrice" },
+            { label: "CouponCode", name: "couponCode" },
             { label: "Amount", name: "amount" },
           ].map((f) => (
             <TextField
