@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styles from './navbar.module.css';
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import logo from '../../assets/YS LOGO green.png';
+import logo from '../../assets/ys_logo_green.png';
 import {
   FaUserCircle,
   FaBars,
