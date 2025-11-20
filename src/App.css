@@ -34,6 +34,7 @@ img {
   border-bottom: 1px solid #ddd;
   font-size: 14px;
 }
+
 .tabledata1 td {
   padding: 20px 20px;
   border-bottom: 1px solid #ddd;
@@ -83,6 +84,7 @@ img {
   gap: 8px;
   align-items: center;
 }
+
 .search input {
   all: unset;
   width: 100%;

@@ -61,7 +61,7 @@
   display: flex;
   justify-content: space-between;
   gap: 20px;
-  flex-wrap: nowrap; 
+  flex-wrap: nowrap;
 }
 
 .chartBox {
@@ -83,7 +83,6 @@
   border-radius: 3px;
   box-sizing: content-box;
 }
-
 
 .summaryCards {
   display: flex;
@@ -124,6 +123,8 @@
 .summaryCard p {
   margin: 5px 0;
   font-size: 13px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .tableSection {
@@ -132,7 +133,7 @@
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
   overflow: hidden;
   margin-top: 10px;
-  width: 100%; 
+  width: 100%;
   padding: 0;
 }
 
@@ -209,16 +210,16 @@
 .paginationIcons:hover {
   color: #13812d;
 }
-.statusColumn{
+.statusColumn {
   display: flex;
   align-items: center;
   gap: 5px;
   justify-content: space-between;
 }
-.statusColumn a{
-  color:white;
+.statusColumn a {
+  color: white;
 }
-.expandIcon{
+.expandIcon {
   font-size: 20px;
   cursor: pointer;
 }
@@ -226,25 +227,19 @@
   .card {
     width: 45%;
   }
- .cardcontainer {
+  .cardcontainer {
     flex-wrap: wrap;
     justify-content: center;
   }
-  .chartBox {
-    /* width: 100%; */
-  }
-
   .summaryCards {
     width: 100%;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 10px;
   }
-
   .summaryCard {
     flex: 1;
   }
-
   .tableSection {
     width: 100%;
     overflow: auto;

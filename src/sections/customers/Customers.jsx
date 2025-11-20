@@ -87,8 +87,8 @@ const Customers = () => {
                     <tr key={item._id} className="tabledata">
                       <td>{(page - 1) * itemsPerPage + index + 1}</td>
                       <td>{item.name}</td>
-                      <td>{item.email}</td>
-                      <td>{item.mobileNo}</td>
+                      <td>{item.email || <span>-</span>}</td>
+                      <td>{item.mobileNo || <span style={{textAlign:'center'}}>-</span>}</td>
                     </tr>
                   ))
 

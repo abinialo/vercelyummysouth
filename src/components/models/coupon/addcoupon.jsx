@@ -17,7 +17,7 @@ const AddCouponModal = ({ open, handleClose, editData, refreshCoupons }) => {
   
   const initialForm = {
     couponName: "",
-    couponCode: "", 
+    // couponCode: "", 
     amount: "",
     type: "",
     fromDate: "",
@@ -116,7 +116,7 @@ const AddCouponModal = ({ open, handleClose, editData, refreshCoupons }) => {
         <Box className={styles.formGrid}>
           {[
             { label: "Coupon Name", name: "couponName" },
-            { label: "CouponCode", name: "couponCode" },
+            // { label: "CouponCode", name: "couponCode" },
             { label: "Amount", name: "amount" },
           ].map((f) => (
             <TextField

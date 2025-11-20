@@ -235,12 +235,12 @@ const Dashboard = () => {
             <p>
               <span style={{
                 fontWeight: '600'
-              }}> Mobile App Users :</span> <span>{user.appUserCount}</span>
+              }}> Mobile App Users :</span> <span style={{marginRight: '8px'}}>{user.appUserCount}</span>
             </p>
             <p>
               <span style={{
                 fontWeight: ' 600'
-              }}> Website Users :</span>  <span>{user.webUserCount}</span>
+              }}> Website Users :</span>  <span style={{marginRight: '8px'}}>{user.webUserCount}</span>
             </p>
           </div>
 
@@ -251,13 +251,14 @@ const Dashboard = () => {
             </div>
             <p>
               <span style={{
-                fontWeight: ' 600'
-              }}>  Stock In :</span> <span>{order?.stockResponse?.stockIn}</span>
+                fontWeight: ' 600',
+                
+              }}>  Stock In :</span> <span style={{marginRight: '8px'}}>{order?.stockResponse?.stockIn}</span>
             </p>
             <p>
               <span style={{
                 fontWeight: ' 600'
-              }}>    Stock Out :</span> <span>{order?.stockResponse?.stckOut}</span>
+              }}>    Stock Out :</span> <span style={{marginRight: '8px'}}>{order?.stockResponse?.stckOut}</span>
             </p>
           </div>
         </div>
