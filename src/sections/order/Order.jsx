@@ -117,25 +117,33 @@ const Order = () => {
     }
   };
 
+  const [inputValue, setInputValue] = useState('');
 
 
   const [customers, setCustomers] = useState([])
-  const getCustomer = async () => {
-    try {
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
 
-      const response = await dropDown(name)
-      setCustomers(response.data?.data)
+ const getCustomer = async () => {
+  try {
+    const response = await dropDown(inputValue);
 
-    } catch (error) {
-      console.log(error)
-    }
+    // Remove duplicates based on name (case insensitive)
+    const uniqueCustomers = Array.from(
+      new Map(response.data.data.map(item => [item.name.toLowerCase(), item])).values()
+    );
+
+    setCustomers(uniqueCustomers);
+  } catch (error) {
+    console.log(error);
   }
+};
+
+
 
   useEffect(() => {
     getCustomer()
-  }, [name])
+  }, [inputValue])
 
-  const [inputValue, setInputValue] = useState('');
 
 
   return (
@@ -183,47 +191,34 @@ const Order = () => {
             </Box>
           </div>
           <div style={{ width: '250px' }}>
-            <Box >
-              <Autocomplete
-                options={[{ _id: 'all', name: 'All' }, ...customers]}
-                getOptionLabel={(option) => option?.name ?? ''}
-                value={[{ _id: 'all', name: 'All' }, ...customers].find((item) => item._id === name) || null}
-                inputValue={inputValue}
+            <Autocomplete
+              options={customers}
+              getOptionLabel={(option) => option?.name ?? ""}
+              value={selectedCustomer}
+              inputValue={inputValue}
 
-                onInputChange={(event, newInputValue) => {
-                  setInputValue(newInputValue);
+              onInputChange={(event, newInputValue) => {
+                setInputValue(newInputValue);
+              }}
 
-                  // FIX: Allow proper search behavior
-                  if (event && event.type === "change") {
-                    setName("");
-                  }
-                }}
+              onChange={(event, newValue) => {
+                setSelectedCustomer(newValue);      // stores object to show in UI
+                setName(newValue?._id || "");       // stores the ID to filter orders
+                setOrders([]);
+                setPage(1);
+              }}
 
-                onChange={(event, newValue) => {
-                  setName(newValue ? newValue._id : '');
-                  setOrders([]);
-                  setPage(1);
-                }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  placeholder="Select customer"
+                  size="small"
+                  autoComplete="off"
+                />
+              )}
+              ListboxProps={{ style: { maxHeight: 210 } }}
+            />
 
-                isOptionEqualToValue={(option, value) => option._id === value._id}
-
-                renderInput={(params) => (
-                  <TextField {...params} placeholder="Select customer" variant="outlined" size="small" />
-                )}
-
-                ListboxProps={{ style: { maxHeight: 210 } }}
-
-                filterOptions={(options, { inputValue }) =>
-                  options.filter((option) =>
-                    option.name?.toLowerCase().includes(inputValue.toLowerCase())
-                  )
-                }
-              />
-
-
-
-
-            </Box>
           </div>
           <div>
             <RangePicker

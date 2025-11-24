@@ -172,7 +172,7 @@ export const dropDown = (name) => {
   return apiService.get(`/user/dropDown?role=consumer,webconsumer&value=${name}`);
 };
 
-export const Orderbyid = (id) => {
+export const Orderbyid = (id) => {  
   return apiService.get(`/orders/admin?_id=${id}`);
 };
 
