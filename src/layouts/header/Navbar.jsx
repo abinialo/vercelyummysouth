@@ -40,7 +40,7 @@ const Navbar = () => {
   useEffect(() => {
     function handleClickOutside(e) {
       if (logoutRef.current && !logoutRef.current.contains(e.target)) {
-        setLogIsOpen(false); // close dropdown
+        setLogIsOpen(false); 
       }
     }
 

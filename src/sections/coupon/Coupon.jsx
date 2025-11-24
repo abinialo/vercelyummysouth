@@ -51,7 +51,7 @@ const Coupon = () => {
       toast.error("Server error while fetching coupons");
     }
     finally {
-    setCouponLoader(false); // stop loader
+    setCouponLoader(false); 
   }
   }, [page]);
 
@@ -138,7 +138,7 @@ const Coupon = () => {
   {couponLoader ? (
     <tr className="tabledata1">
       <td colSpan="8" style={{ textAlign: "center" }}>
-        <Loader /> {/* Show your Loader component */}
+        <Loader />
       </td>
     </tr>
   ) : coupons.length > 0 ? (

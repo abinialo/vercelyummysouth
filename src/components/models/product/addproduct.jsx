@@ -86,7 +86,7 @@ const AddProductModal = ({
     }
   }, [open, productData]);
 
-  // Form input change
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -97,7 +97,7 @@ const AddProductModal = ({
     }
   };
 
-  // Price detail change
+
   const handlePriceChange = (index, field, value) => {
     const updated = [...priceDetails];
     if (field === "price" || field === "cutprice") {
@@ -108,7 +108,7 @@ const AddProductModal = ({
     setPriceDetails(updated);
   };
 
-  // Add price row
+ 
   const handleAddPriceDetail = () => {
     setPriceDetails([
       ...priceDetails,
@@ -116,19 +116,19 @@ const AddProductModal = ({
     ]);
   };
 
-  // Remove price row
+ 
   const handleRemovePriceDetail = (index) => {
     const updated = [...priceDetails];
     updated.splice(index, 1);
     setPriceDetails(updated);
   };
 
-  // File upload
+ 
   const handleFileChange = async (e) => {
   const files = Array.from(e.target.files);
   if (files.length === 0) return;
 
-  // ✅ 500KB = 500 * 1024 bytes
+
   const MAX_SIZE = 500 * 1024;
   const validFiles = [];
   const invalidFiles = [];
