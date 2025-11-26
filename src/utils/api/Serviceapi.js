@@ -111,10 +111,10 @@ export const uploadProductImages = (formData) => {
 export const DeleteProduct = (id) => {
   return apiService.delete(`/products/${id}`);
 };
-
 export const getCoupons = (limit, offset) => {
   return apiService.get(`/couponMaster?limit=${limit}&offset=${offset}`);
 };
+
 export const AddCoupon = (data) => {
   return apiService.post(`/couponMaster`, data);
 };

@@ -31,7 +31,7 @@ const Coupon = () => {
     try {
        setCouponLoader(true);
       const limit = itemsPerPage;
-      const offset = (page - 1) * limit;
+      const offset = (page - 1) ;
       const response = await getCoupons(limit, offset);
       console.log("API Response:", response.data);
 
