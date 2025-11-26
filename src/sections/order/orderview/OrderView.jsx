@@ -166,11 +166,11 @@ const OrderView = () => {
 
                                                     }}
                                                 >
-                                                    <MenuItem value='new'>New</MenuItem>
-                                                    <MenuItem value='assigned'>Assigned</MenuItem>
-                                                    <MenuItem value='inprogress'>Inprogress</MenuItem>
-                                                    <MenuItem value='delivered'>Delivered</MenuItem>
-                                                    <MenuItem value='cancelled'>Cancelled</MenuItem>
+                                                    <MenuItem value='new' disabled={orders?.orderStatus?.toLowerCase() === "delivered"} >New</MenuItem>
+                                                    <MenuItem value='assigned' disabled={orders?.orderStatus?.toLowerCase() === "delivered"}>Assigned</MenuItem>
+                                                    <MenuItem value='inprogress' disabled={orders?.orderStatus?.toLowerCase() === "delivered"}>Inprogress</MenuItem>
+                                                    <MenuItem value='delivered' disabled={orders?.orderStatus?.toLowerCase() === "delivered"}>Delivered</MenuItem>
+                                                    <MenuItem value='cancelled' disabled={orders?.orderStatus?.toLowerCase() === "delivered"}>Cancelled</MenuItem>
                                                 </Select>
                                             </FormControl>
                                         </Box>
