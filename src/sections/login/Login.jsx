@@ -4,6 +4,9 @@ import styles from "./login.module.css";
 import { FaUser, FaLock } from "react-icons/fa";
 import { LoginUser } from "../../utils/api/Serviceapi";
 import { toast } from "react-toastify";
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
+
 
 const Login = () => {
   const navigate = useNavigate();
@@ -68,6 +71,9 @@ const Login = () => {
     if (passwordError) setPasswordError("");
   };
 
+  const [show, setShow] = useState(false)
+
+
   return (
     <div className={styles.pageWrapper}>
       <div className={styles.loginContainer}>
@@ -98,19 +104,28 @@ const Login = () => {
             <div>
               <div className={styles.inputBox}>
                 <FaLock className={styles.inputIcon} />
-                <input
-                  type="password"
+                <input                
+                  type={show ? "text" :  "password"}
                   placeholder="Password"
                   value={password}
                   onChange={handlePasswordChange}
                 />
+                {show
+                  ?
+                  <FaEye className={styles.eyeIcon} onClick={()=>setShow(false)}/>
+                  :
+                  <FaEyeSlash className={styles.eyeIcon} onClick={()=>setShow(true)}/>
+                }
+
+
+
               </div>
               {passwordError && (
                 <p className={styles.errorMsg}>{passwordError}</p>
               )}
             </div>
 
-            <button type="submit"  disabled={loading} style={{ cursor: loading ? 'not-allowed' : 'pointer',backgroundColor: loading ? 'gray' : '#064635' }}
+            <button type="submit" disabled={loading} style={{ cursor: loading ? 'not-allowed' : 'pointer', backgroundColor: loading ? 'gray' : '#064635' }}
               className={styles.loginBtn}>
               {loading ? 'Loading...' : 'LOGIN'}
             </button>
