@@ -28,7 +28,11 @@ const AddCouponModal = ({ open, handleClose, editData, refreshCoupons }) => {
   const [formData, setFormData] = useState(initialForm);
   const [touched, setTouched] = useState(false);
 
-  
+  const toInputDate = (dateStr) => {
+  if (!dateStr) return "";
+  return dateStr.split("T")[0];  // gives exact YYYY-MM-DD without timezone
+};
+
   useEffect(() => {
     if (open) {
       if (editData) {
@@ -37,8 +41,9 @@ const AddCouponModal = ({ open, handleClose, editData, refreshCoupons }) => {
           couponCode: editData.couponCode || "",
           amount: editData.amount || "",
           type: editData.type || "",
-          fromDate: editData.startDate?.split("T")[0] || "",
-          endDate: editData.endDate?.split("T")[0] || "",
+      fromDate: toInputDate(editData.startDate),
+endDate: toInputDate(editData.endDate),
+
           status: editData.status || "",
         });
       } else {
