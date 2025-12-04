@@ -321,6 +321,8 @@ const Master = () => {
                           setCategoryModalOpen(true);
                           setIsEditMode(false);
                           setAddCategory({ categoryName: "", imgUrl: "" });
+                          setError(false);
+                          setimgError(false);
                         }}
                       >
                         Add Category
@@ -390,6 +392,7 @@ const Master = () => {
                           setDeliveryModalOpen(true);
                           setIsdeliveryMode(false);
                           setAddDelivery({ state: "", deliveryCharge: "" });
+                          setDeliveryerror({ state: false, deliveryCharge: false });
                         }}
                       >
                         Add Delivery Charge
@@ -455,7 +458,11 @@ const Master = () => {
           body: { fontSize: "16px", },
         }}
         open={categoryModalOpen}
-        onCancel={() => setCategoryModalOpen(false)}
+        onCancel={() => {
+          setCategoryModalOpen(false);
+          setError(false);
+          setimgError(false);
+        }}
         footer={null}
         centered
         title={
@@ -647,8 +654,10 @@ const Master = () => {
 
       <Modal
         open={deliveryModalOpen}
-        onCancel={() => setDeliveryModalOpen(false)}
-        footer={null}
+        onCancel={() => {
+          setDeliveryModalOpen(false);
+          setDeliveryerror({ state: false, deliveryCharge: false });
+        }} footer={null}
         centered
         styles={{
           header: { textAlign: "center" },
