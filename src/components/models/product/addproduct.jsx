@@ -100,11 +100,12 @@ const AddProductModal = ({
 
   const handlePriceChange = (index, field, value) => {
     const updated = [...priceDetails];
-    if (field === "price" || field === "cutprice") {
-      updated[index][field] = value === "" ? 0 : Number(value);
-    } else {
-      updated[index][field] = value;
-    }
+   if (field === "price" || field === "cutprice") {
+  updated[index][field] = value; // keep as string
+} else {
+  updated[index][field] = value;
+}
+
     setPriceDetails(updated);
   };
 
@@ -112,7 +113,7 @@ const AddProductModal = ({
   const handleAddPriceDetail = () => {
     setPriceDetails([
       ...priceDetails,
-      { prodQuantity: "", uom: "", price: 0, cutprice: 0 },
+     { prodQuantity: "", uom: "", price: "", cutprice: "" },
     ]);
   };
 
@@ -198,20 +199,37 @@ const validateForm = () => {
     tempErrors.imgUrl = "Please upload at least one product image";
 
 
-  if (priceDetails.length === 0) {
-    tempErrors.priceDetails = "At least one price detail is required";
-  } else {
-    priceDetails.forEach((detail, index) => {
-      if (!detail.prodQuantity)
-        tempErrors[`prodQuantity_${index}`] = "Quantity required";
-      if (!detail.uom)
-        tempErrors[`uom_${index}`] = "UOM required";
-      if (detail.price === "" || detail.price <= 0)
-        tempErrors[`price_${index}`] = "Price must be greater than 0";
-      if (detail.cutprice === "" || detail.cutprice < 0)
-        tempErrors[`cutprice_${index}`] = "Cut price cannot be negative";
-    });
-  }
+ if (priceDetails.length === 0) {
+  tempErrors.priceDetails = "At least one price detail is required";
+} else {
+  priceDetails.forEach((detail, index) => {
+
+    if (!detail.prodQuantity) {
+      tempErrors[`prodQuantity_${index}`] = "Quantity required";
+    }
+
+    if (!detail.uom) {
+      tempErrors[`uom_${index}`] = "UOM required";
+    }
+
+    if (detail.price === "" || Number(detail.price) <= 0) {
+      tempErrors[`price_${index}`] = "Price must be greater than 0";
+    }
+
+    // ✅ FIXED CUT PRICE VALIDATION
+    if (
+      detail.cutprice === "" || 
+      detail.cutprice === null || 
+      detail.cutprice === undefined
+    ) {
+      tempErrors[`cutprice_${index}`] = "Cut price is required";
+    } else if (Number(detail.cutprice) < 0) {
+      tempErrors[`cutprice_${index}`] = "Cut price cannot be negative";
+    }
+
+  });
+}
+
 
   setErrors(tempErrors);
   return Object.keys(tempErrors).length === 0;
@@ -348,12 +366,26 @@ const validateForm = () => {
           <Box sx={{ mt: 3 }}>
   <Box display="flex" alignItems="center" gap={1}>
     <Typography fontWeight="bold">Price Details</Typography>
-    <IconButton
-      onClick={handleAddPriceDetail}
-      sx={{ background: "#1976d2", color: "#fff", p: 1 }}
-    >
-      <Add />
-    </IconButton>
+  <IconButton
+  onClick={handleAddPriceDetail}
+  sx={{
+    background: "#1976d2 !important",
+    color: "#fff",
+    p: 1,
+    "&:hover": {
+      background: "#1976d2 !important",   // no hover change
+    },
+    "&:active": {
+      background: "#1976d2 !important",   // no click change
+    },
+    "& .MuiTouchRipple-root": {
+      display: "none",  // removes ripple
+    }
+  }}
+>
+  <Add />
+</IconButton>
+
   </Box>
 
   {errors.priceDetails && (
@@ -412,10 +444,23 @@ const validateForm = () => {
   error={!!errors[`cutprice_${index}`]}
   helperText={errors[`cutprice_${index}`]}
 />
+<IconButton
+  onClick={() => handleRemovePriceDetail(index)}
+  disableRipple
+  sx={{
+    background: "transparent !important",
+    "&:hover": {
+      background: "transparent !important",
+      boxShadow: "none",
+    },
+    "& .MuiTouchRipple-root": {
+      display: "none",
+    }
+  }}
+>
+  <Delete sx={{ color: "red" }} />
+</IconButton>
 
-            <IconButton onClick={() => handleRemovePriceDetail(index)}>
-              <Delete sx={{ color: "red" }} />
-            </IconButton>
           </Box>
         ))}
 

@@ -15,7 +15,7 @@ import { Autocomplete, TextField } from '@mui/material';
 import Loader from '../../components/loader/Loader';
 const Order = () => {
 
-  const [orders, setOrders] = useState([])
+  const [orders, setOrders] = useState([]);
   const [selectedRange, setSelectedRange] = useState([]);
 
   const [page, setPage] = useState(1);
