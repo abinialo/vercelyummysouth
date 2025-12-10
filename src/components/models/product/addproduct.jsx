@@ -217,15 +217,19 @@ const validateForm = () => {
     }
 
     // ✅ FIXED CUT PRICE VALIDATION
-    if (
-      detail.cutprice === "" || 
-      detail.cutprice === null || 
-      detail.cutprice === undefined
-    ) {
-      tempErrors[`cutprice_${index}`] = "Cut price is required";
-    } else if (Number(detail.cutprice) < 0) {
-      tempErrors[`cutprice_${index}`] = "Cut price cannot be negative";
-    }
+   if (
+  detail.cutprice === "" ||
+  detail.cutprice === null ||
+  detail.cutprice === undefined
+) {
+  tempErrors[`cutprice_${index}`] = "Cut price is required";
+} else if (Number(detail.cutprice) < 0) {
+  tempErrors[`cutprice_${index}`] = "Cut price cannot be negative";
+} else if (Number(detail.cutprice) < Number(detail.price)) {
+  tempErrors[`cutprice_${index}`] =
+    "Cut price must be greater than base price";
+}
+
 
   });
 }

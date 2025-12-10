@@ -30,7 +30,7 @@ const AddCouponModal = ({ open, handleClose, editData, refreshCoupons }) => {
 
   const toInputDate = (dateStr) => {
   if (!dateStr) return "";
-  return dateStr.split("T")[0];  // gives exact YYYY-MM-DD without timezone
+  return dateStr.split("T")[0];  
 };
 
   useEffect(() => {
