@@ -41,8 +41,8 @@ const AddCouponModal = ({ open, handleClose, editData, refreshCoupons }) => {
           couponCode: editData.couponCode || "",
           amount: editData.amount || "",
           type: editData.type || "",
-      fromDate: toInputDate(editData.startDate),
-endDate: toInputDate(editData.endDate),
+          fromDate: toInputDate(editData.startDate),
+          endDate: toInputDate(editData.endDate),
 
           status: editData.status || "",
         });

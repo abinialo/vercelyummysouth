@@ -30,6 +30,8 @@ const AddProductModal = ({
     productName: "",
     status: "active",
     availableProductQuantity: "",
+    availableQuantityIn: "",
+
     description: "",
     recommended: false,
     imgUrl: [],
@@ -64,6 +66,7 @@ const AddProductModal = ({
         productName: productData.productName || "",
         status: productData.status || "active",
         availableProductQuantity: productData.availableProductQuantity || "",
+        availableQuantityIn: productData.availableQuantityIn || "", 
         description: productData.description || "",
         recommended: productData.recommended || false,
         imgUrl: productData.imgUrl || [],
@@ -76,6 +79,8 @@ const AddProductModal = ({
         productName: "",
         status: "active",
         availableProductQuantity: "",
+        availableQuantityIn: "",
+
         description: "",
         recommended: false,
         imgUrl: [],
@@ -99,21 +104,22 @@ const AddProductModal = ({
 
 
   const handlePriceChange = (index, field, value) => {
-    const updated = [...priceDetails];
-   if (field === "price" || field === "cutprice") {
-  updated[index][field] = value; // keep as string
-} else {
-  updated[index][field] = value;
-}
+  const updated = [...priceDetails];
 
-    setPriceDetails(updated);
-  };
+  if (field === "price" || field === "cutprice") {
+    updated[index][field] = value === "" ? null : Number(value);
+  } else {
+    updated[index][field] = value;
+  }
+
+  setPriceDetails(updated);
+};
 
  
   const handleAddPriceDetail = () => {
     setPriceDetails([
       ...priceDetails,
-     { prodQuantity: "", uom: "", price: "", cutprice: "" },
+     { prodQuantity: "", uom: "", price:null, cutprice:null },
     ]);
   };
 
@@ -189,51 +195,59 @@ const AddProductModal = ({
 const validateForm = () => {
   let tempErrors = {};
 
-  if (!formData.categoryId) tempErrors.categoryId = "Category is required";
-  if (!formData.productName) tempErrors.productName = "Product name is required";
-  if (!formData.status) tempErrors.status = "Status is required";
-  if (!formData.availableProductQuantity || isNaN(formData.availableProductQuantity)) {
-    tempErrors.availableProductQuantity = "Available quantity must be a number";
+  if (!formData.categoryId)
+    tempErrors.categoryId = "Category is required";
+
+  if (!formData.productName)
+    tempErrors.productName = "Product name is required";
+
+  if (!formData.status)
+    tempErrors.status = "Status is required";
+
+  if (
+    formData.availableProductQuantity === "" ||
+    isNaN(formData.availableProductQuantity) ||
+    Number(formData.availableProductQuantity) <= 0
+  ) {
+    tempErrors.availableProductQuantity =
+      "Available quantity must be greater than 0";
   }
+  if (!formData.availableQuantityIn) {
+  tempErrors.availableQuantityIn = "Please select quantity unit";
+}
+
   if (!formData.imgUrl || formData.imgUrl.length === 0)
     tempErrors.imgUrl = "Please upload at least one product image";
 
+  // PRICE DETAILS VALIDATION
+  if (priceDetails.length === 0) {
+    tempErrors.priceDetails = "At least one price detail is required";
+  } else {
+    priceDetails.forEach((detail, index) => {
+      if (!detail.prodQuantity) {
+        tempErrors[`prodQuantity_${index}`] = "Quantity required";
+      }
 
- if (priceDetails.length === 0) {
-  tempErrors.priceDetails = "At least one price detail is required";
-} else {
-  priceDetails.forEach((detail, index) => {
+      if (!detail.uom) {
+        tempErrors[`uom_${index}`] = "UOM required";
+      }
 
-    if (!detail.prodQuantity) {
-      tempErrors[`prodQuantity_${index}`] = "Quantity required";
-    }
-
-    if (!detail.uom) {
-      tempErrors[`uom_${index}`] = "UOM required";
-    }
-
-    if (detail.price === "" || Number(detail.price) <= 0) {
-      tempErrors[`price_${index}`] = "Price must be greater than 0";
-    }
-
-    // ✅ FIXED CUT PRICE VALIDATION
-   if (
-  detail.cutprice === "" ||
-  detail.cutprice === null ||
-  detail.cutprice === undefined
-) {
-  tempErrors[`cutprice_${index}`] = "Cut price is required";
-} else if (Number(detail.cutprice) < 0) {
-  tempErrors[`cutprice_${index}`] = "Cut price cannot be negative";
-} else if (Number(detail.cutprice) < Number(detail.price)) {
-  tempErrors[`cutprice_${index}`] =
-    "Cut price must be greater than base price";
-}
+   
+      if (detail.price <= 0) {
+        tempErrors[`price_${index}`] =
+          "Price must be greater than 0";
+      }
 
 
-  });
-}
-
+      if (detail.cutprice < 0) {
+        tempErrors[`cutprice_${index}`] =
+          "Cut price cannot be negative";
+      } else if (detail.cutprice < detail.price) {
+        tempErrors[`cutprice_${index}`] =
+          "Cut price must be greater than base price";
+      }
+    });
+  }
 
   setErrors(tempErrors);
   return Object.keys(tempErrors).length === 0;
@@ -252,6 +266,7 @@ const validateForm = () => {
         productName: formData.productName,
         status: formData.status,
         availableProductQuantity: formData.availableProductQuantity,
+         availableQuantityIn: formData.availableQuantityIn || "", 
         description: formData.description,
         recommended: formData.recommended,
         priceDetails: priceDetails,
@@ -350,16 +365,38 @@ const validateForm = () => {
 
        
         <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", mt: 3, gap: 2 }}>
-          <TextField
-            name="availableProductQuantity"
-            label="Enter Available Quantity *"
-            variant="standard"
-            sx={{ flex: "1 1 200px" }}
-            value={formData.availableProductQuantity}
-            onChange={handleInputChange}
-            error={!!errors.availableProductQuantity}
-            helperText={errors.availableProductQuantity}
-          />
+         <Box sx={{ display: "flex", gap: 2, flex: "1 1 300px" }}>
+  <TextField
+    name="availableProductQuantity"
+    label="Available Quantity *"
+    variant="standard"
+    type="number"
+    value={formData.availableProductQuantity}
+    onChange={handleInputChange}
+    error={!!errors.availableProductQuantity}
+    helperText={errors.availableProductQuantity}
+    sx={{ flex: 1 }}
+  />
+
+  <TextField
+    name="availableQuantityIn"
+    label="In *"
+    variant="standard"
+    select
+    value={formData.availableQuantityIn || ""}
+    onChange={handleInputChange}
+
+    error={!!errors.availableQuantityIn}
+  helperText={errors.availableQuantityIn}
+  sx={{ width: 120 }}
+  >
+    <MenuItem value="">Select</MenuItem>
+    <MenuItem value="nos">nos</MenuItem>
+    <MenuItem value="g">g</MenuItem>
+    <MenuItem value="kg">kg</MenuItem>
+  </TextField>
+</Box>
+
           <Box display="flex" alignItems="center" gap={1}>
             <Typography>Recommended</Typography>
             <Switch
@@ -377,13 +414,13 @@ const validateForm = () => {
     color: "#fff",
     p: 1,
     "&:hover": {
-      background: "#1976d2 !important",   // no hover change
+      background: "#1976d2 !important",   
     },
     "&:active": {
-      background: "#1976d2 !important",   // no click change
+      background: "#1976d2 !important",  
     },
     "& .MuiTouchRipple-root": {
-      display: "none",  // removes ripple
+      display: "none",  
     }
   }}
 >
@@ -431,9 +468,9 @@ const validateForm = () => {
 
 <TextField
   label="Price"
-  variant="standard"
   type="number"
-  value={detail.price}
+  variant="standard"
+  value={detail.price ?? ""}
   onChange={(e) => handlePriceChange(index, "price", e.target.value)}
   error={!!errors[`price_${index}`]}
   helperText={errors[`price_${index}`]}
@@ -441,13 +478,14 @@ const validateForm = () => {
 
 <TextField
   label="Cut Price"
-  variant="standard"
   type="number"
-  value={detail.cutprice}
+  variant="standard"
+  value={detail.cutprice ?? ""}
   onChange={(e) => handlePriceChange(index, "cutprice", e.target.value)}
   error={!!errors[`cutprice_${index}`]}
   helperText={errors[`cutprice_${index}`]}
 />
+
 <IconButton
   onClick={() => handleRemovePriceDetail(index)}
   disableRipple
