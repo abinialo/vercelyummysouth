@@ -22,6 +22,10 @@ import { Link } from "react-router-dom";
 
 
 
+
+
+
+
 const Dashboard = () => {
 
   const [user, setUser] = useState({})
@@ -38,6 +42,8 @@ const Dashboard = () => {
   useEffect(() => {
     orderDetails();
   }, [])
+
+
 
   useEffect(() => {
     getStocksproducts();
@@ -258,7 +264,7 @@ const Dashboard = () => {
             <p>
               <span style={{
                 fontWeight: ' 600'
-              }}>    Stock Out :</span> <span style={{marginRight: '8px'}}>{order?.stockResponse?.stckOut}</span>
+              }}>    Stock Out :</span> <span style={{marginRight: '8px'}}>{order?.stockResponse?.stockOut}</span>
             </p>
           </div>
         </div>

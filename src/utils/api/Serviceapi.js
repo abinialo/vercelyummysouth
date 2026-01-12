@@ -1,5 +1,7 @@
 import apiService from "./apiService";
 
+
+
 export const LoginUser = (email, password) => {
   return apiService.post(`/user/web/login`, { email, password });
 };
@@ -196,4 +198,9 @@ export const orderDashboard = () => {
 
 export const userDashboard = () => {
   return apiService.get(`/user/dashboard/summary`);
+};
+export const updateFcmToken = (userId, fcmToken) => {
+  return apiService.put(`/user/${userId}`, {
+    fcmToken,
+  });
 };

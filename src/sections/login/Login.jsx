@@ -6,6 +6,8 @@ import { LoginUser } from "../../utils/api/Serviceapi";
 import { toast } from "react-toastify";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
+import { updateFcmToken } from "../../utils/api/Serviceapi";
+import { getFcmToken } from "../../firebase/useFcmToken";
 
 
 const Login = () => {
@@ -17,48 +19,63 @@ const Login = () => {
   const [passwordError, setPasswordError] = useState("");
   const [loading, setLoding] = useState(false)
   const handleLogin = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    let valid = true;
-    setEmailError("");
-    setPasswordError("");
+  let valid = true;
+  setEmailError("");
+  setPasswordError("");
 
+  if (!email) {
+    setEmailError("Email is required");
+    valid = false;
+  } else if (
+    !/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/.test(email)
+  ) {
+    setEmailError("Please enter a valid email address");
+    valid = false;
+  }
 
-    if (!email) {
-      setEmailError("Email is required");
-      valid = false;
-    } else if (!/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/.test(email)) {
+  if (!password) {
+    setPasswordError("Password is required");
+    valid = false;
+  } else if (password.length < 6) {
+    setPasswordError("Password must be at least 6 characters");
+    valid = false;
+  }
 
+  if (!valid) return;
 
-      setEmailError("Please enter a valid email address");
-      valid = false;
+  setLoding(true);
 
+  try {
+    const response = await LoginUser(email, password);
+
+  
+    const userId = response?.data?.data?.data?.userId;
+
+    sessionStorage.setItem("isLoggedIn", "true");
+    sessionStorage.setItem("userId", userId);
+
+    const fcmToken = await getFcmToken();
+    console.log(" FCM TOKEN:", fcmToken);
+
+ 
+    if (fcmToken && userId) {
+      await updateFcmToken(userId, fcmToken);
+      console.log(" FCM token patched successfully");
+      console.log(fcmToken);
     }
-    if (!password) {
-      setPasswordError("Password is required");
-      valid = false;
-    } else if (password.length < 6) {
-      setPasswordError("Password must be at least 6 characters");
-      valid = false;
-    }
 
-    if (valid) {
-      setLoding(true)
-      try {
-        const response = await LoginUser(email, password)
-        console.log(response)
-        sessionStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("userid", response.data.data.data.userId);
-        navigate("/dashboard");
-        toast.success("Login successful!");
-      } catch (error) {
-        console.log(error);
-        toast.error(error.response.data.message);
-      } finally {
-        setLoding(false)
-      }
-    }
-  };
+    toast.success("Login successful!");
+    navigate("/dashboard");
+
+  } catch (error) {
+    console.error(error);
+    toast.error(error?.response?.data?.message || "Login failed");
+  } finally {
+    setLoding(false);
+  }
+};
 
 
   const handleEmailChange = (e) => {

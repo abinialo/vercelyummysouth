@@ -11,7 +11,19 @@ root.render(
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+// 🔥 ADD THIS BELOW root.render (VERY IMPORTANT)
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("/firebase-messaging-sw.js")
+      .then((registration) => {
+        console.log("FCM Service Worker registered:", registration);
+      })
+      .catch((err) => {
+        console.error("SW registration failed:", err);
+      });
+  });
+}
+
+// Performance measurement (optional)
 reportWebVitals();

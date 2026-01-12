@@ -219,7 +219,7 @@ const validateForm = () => {
   if (!formData.imgUrl || formData.imgUrl.length === 0)
     tempErrors.imgUrl = "Please upload at least one product image";
 
-  // PRICE DETAILS VALIDATION
+
   if (priceDetails.length === 0) {
     tempErrors.priceDetails = "At least one price detail is required";
   } else {
